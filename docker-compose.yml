@@ -6,3 +6,9 @@ services:
       - '6379:6379'
     volumes:
       - ./data:/data
+  backend:
+    build: ./backend
+    ports:
+      - '8000:8000'
+    environment:
+      - REDIS=redis:6379

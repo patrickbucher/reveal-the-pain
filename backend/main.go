@@ -9,9 +9,9 @@ import (
 )
 
 var client = redis.NewClient(&redis.Options{
-	Addr:     "localhost:6379", // TODO: use environment variable from Docker
-	Password: "",               // NOTE: no password is used currently
-	DB:       0,                // NOTE: this is the default DB
+	Addr:     os.Getenv("REDIS"),
+	Password: "", // TODO: consider setting a password
+	DB:       0,  // NOTE: this is the default DB
 })
 
 func main() {

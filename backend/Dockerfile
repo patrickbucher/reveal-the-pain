@@ -1,7 +1,7 @@
 FROM golang:1.12.9-alpine AS builder
 LABEL maintainer="Patrick Bucher <patrick.bucher@stud.hslu.ch>"
-RUN apk add gcc libc-dev
-COPY *.go go.mod /src/
+RUN apk add gcc libc-dev git 
+COPY *.go go.mod go.sum /src/
 WORKDIR /src
 RUN go test && go build -o /app/reveal-the-pain
 
