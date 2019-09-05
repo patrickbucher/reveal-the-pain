@@ -1,5 +1,3 @@
-# Arbeitsjournal
-
 | Datum      | Stunden | Bereich      | Tätigkeit                                          |
 |------------|--------:|--------------|----------------------------------------------------|
 | 01.09.2019 |       1 | Projekt      | Projektidee ausgearbeitet                          |
