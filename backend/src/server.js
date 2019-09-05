@@ -2,7 +2,7 @@
 
 const express = require('express');
 
-const PORT = 8000; // TODO: get from env var
+const PORT = process.env.PORT;
 const HOST = '0.0.0.0';
 
 const app = express();
