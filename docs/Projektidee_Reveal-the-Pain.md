@@ -28,16 +28,17 @@ Lycanothrope's Log_).
 
 Die Applikation wird von mir als Einzelarbeit umgesetzt.
 
-- **Frontend**: Self-Tracking (tägliches Erfassen verschiedener Tags),
-  Auswertung (Korrelation zwischen Ziel-Tag mit jeweils anderen Tags berechnen
-  und auflisten)
-    - Vanilla JS, Web Components, Jest, npm 
-- **Backend**: RESTful API zum Abspeichern der Datums-Tag-Kombinationen und
-  Berechnung der Phi-Koeffizienten
-    - Go oder Node.js (noch offen)
-- **Datenhaltung**: Redundante Speicherung der Tags pro Datum und Daten pro
-  Tag
-    - Redis Key-Value Store
-- **Deployment**: Die Applikation soll lokal für einen Benutzer lauffähig sein
-  und beinhaltet keinen Mechanismus zur Authentifizierung.
-    - Docker, Docker Compose
+**Frontend**: Self-Tracking (tägliches Erfassen verschiedener Tags), Auswertung
+(Korrelation zwischen Ziel-Tag mit jeweils anderen Tags berechnen und
+auflisten); Technologien: Vanilla JS, Web Components, Jest, npm 
+
+**Backend**: RESTful API zum Abspeichern der Datums-Tag-Kombinationen und
+Berechnung der Phi-Koeffizienten; Technologien: Go oder Node.js (noch offen)
+
+**Datenhaltung**: Redundante Speicherung der Tags pro Datum und Daten pro
+  Tag; Technologie: Redis Key-Value Store
+
+**Deployment**: Die Applikation wird nur lokal deployed und bietet einen
+einfachen Authentifizierungsmechanismus für mehrere Benutzer, deren
+Zugangsdaten statisch hinterlegt sind. Technologien: Docker, Docker Compose,
+HTTP Basic Authentication oder OAuth 2.0 (noch offen)
