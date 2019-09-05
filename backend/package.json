@@ -11,6 +11,7 @@
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "express": "^4.17.1",
-    "jest": "^24.9.0"
+    "jest": "^24.9.0",
+    "redis": "^2.8.0"
   }
 }
