@@ -1,0 +1,16 @@
+{
+  "name": "reveal-the-pain-backend",
+  "version": "0.0.1",
+  "description": "Backend for the Reveal the Pain application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "express": "^4.17.1",
+    "jest": "^24.9.0"
+  }
+}
