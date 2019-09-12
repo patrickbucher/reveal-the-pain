@@ -7,8 +7,8 @@ FNR>2 {
 }
 
 END {
-    print "Total:", total, "Stunden";
+    printf "Total: %.1f Stunden\n", total
     for (domain in domains) {
-        printf "%s: %d Stunden\n", domain, domains[domain]
+        printf "%s: %.1f Stunden\n", domain, domains[domain]
     }
 }

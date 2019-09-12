@@ -5,3 +5,4 @@
 | 01.09.2019 |       1 | Deployment   | initiale Konfiguration für Docker Compose erstellt               |
 | 04.09.2019 |       1 | Projekt      | Projektbeschreibung erstellt                                     |
 | 05.09.2019 |       1 | Backend      | Backend mit Node.js, Express, Redis-Client und Docker aufgesetzt |
+| 12.09.2019 |     0.5 | Backend      | API-Design erarbeitet                                            |
