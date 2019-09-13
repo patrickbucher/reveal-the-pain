@@ -1,18 +1,19 @@
 const redis = require('redis');
-const client = redis.createClient();
-
 const {promisify} = require('util');
-const getAsync = promisify(client.get).bind(client);
 
-function get(key) {
-    return getAsync(key);
+class RedisStorage {
+    constructor() {
+        this.client = redis.createClient();
+        this.get = promisify(this.client.get).bind(this.client);
+        this.sadd = promisify(this.client.sadd).bind(this.client);
+    }
+    createLogentry(username, date, tag) {
+        const key = `${username}:${date}`;
+        return this.sadd(key, tag);
+    }
+    quit() {
+        client.quit();
+    }
 }
 
-let a = get('vorname');
-let b = get('nachname');
-Promise.all([a, b]).then(vals => {
-    [vorname, nachname] = vals;
-    console.log(vorname, nachname);
-});
-
-client.quit();
+module.exports = RedisStorage;
