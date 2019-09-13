@@ -18,7 +18,8 @@ function validDate(dateStr) {
 }
 
 function validUsername(username) {
-    return false;
+    const match = username.match(/^[a-zA-Z0-9]{4,12}$/);
+    return match !== null && match.length === 1;
 }
 
 function validTag(tag) {
