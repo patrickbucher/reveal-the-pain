@@ -7,3 +7,4 @@
 | 05.09.2019 |     1.0 | Backend      | Backend mit Node.js, Express, Redis-Client und Docker aufgesetzt |
 | 12.09.2019 |     0.5 | Backend      | API-Design erarbeitet                                            |
 | 13.09.2019 |     1.0 | Backend      | Durchstich imt Express.js und Redis: Log-Eintrag erfassen        |
+| 13.09.2019 |     0.1 | Backend      | Validierungsfunktionen mit Testfällen entwickelt                 |
