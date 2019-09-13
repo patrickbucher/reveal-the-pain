@@ -23,7 +23,8 @@ function validUsername(username) {
 }
 
 function validTag(tag) {
-    return false;
+    const match = tag.match(/^[a-zA-Z0-9]{4,100}$/);
+    return match !== null && match.length === 1;
 }
 
 module.exports = [validDate, validUsername, validTag];

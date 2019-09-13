@@ -21,3 +21,12 @@ test('the username must be an alphanumeric string of length 4..12', () => {
     expect(validUsername('wHaTeVeR')).toBe(true);
     expect(validUsername('john1337')).toBe(true);
 });
+
+test('the tag must be an alphanumeric string of length 4..100', () => {
+    expect(validTag('too much beer')).toBe(false); // spaces
+    expect(validTag('TooMuchBeer')).toBe(true);
+    expect(validTag('yay')).toBe(false); // too short
+    expect(validTag('37Beers')).toBe(true);
+    expect(validTag('x'.repeat(100))).toBe(true);
+    expect(validTag('x'.repeat(101))).toBe(false); // too long
+});
