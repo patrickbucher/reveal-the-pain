@@ -4,7 +4,8 @@
   "description": "Backend for the Reveal the Pain application",
   "main": "server.js",
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
