@@ -2,6 +2,7 @@
 
 const express = require('express');
 const RedisStorage = require('./redis');
+const [validDate, validUsername, validTag] = require('./validator');
 
 const PORT = process.env.PORT || '8000';
 const HOST = '0.0.0.0';
@@ -15,10 +16,12 @@ app.get('/canary', (req, res) => {
 });
 
 app.put('/:username/logentry/:date/:tag', (req, res) => {
-    // TODO validate input data
     const username = req.params.username;
     const date = req.params.date;
     const tag = req.params.tag;
+    if (!validUsername(username) || !validDate(date) || !validTag(tag)) {
+        res.sendStatus(400);
+    }
     storage.createLogentry(username, date, tag)
         .then(() => res.sendStatus(201))
         .catch(() => res.sendStatus(500));
