@@ -5,9 +5,10 @@ const RedisStorage = require('./redis');
 
 const PORT = process.env.PORT || '8000';
 const HOST = '0.0.0.0';
+const REDIS = 'redis://' + (process.env.REDIS || 'localhost:6379');
 
 const app = express();
-const storage = new RedisStorage(); // TODO: consider passing hostname:port
+const storage = new RedisStorage(REDIS);
 
 app.get('/canary', (req, res) => {
     res.sendStatus(200);
