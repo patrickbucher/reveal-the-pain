@@ -20,9 +20,8 @@ app.put('/:username/logentry/:date/:tag', (req, res) => {
     const date = req.params.date;
     const tag = req.params.tag;
     storage.createLogentry(username, date, tag)
-        .then(x => console.log)
-        .catch(e => console.err);
-    res.sendStatus(201);
+        .then(() => res.sendStatus(201))
+        .catch(() => res.sendStatus(500));
 });
 
 app.listen(PORT, HOST);
