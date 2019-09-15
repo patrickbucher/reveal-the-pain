@@ -39,6 +39,17 @@ app.delete('/:username/logentry/:date/:tag', (req, res) => {
     }
 });
 
+app.get('/:username/tags', (req, res) => {
+    const username = req.params.username;
+    if (!validUsername(username)) {
+        console.log(`invalid username ${username}`);
+        res.sendStatus(400);
+    }
+    storage.getUserTags(username)
+        .then(tags => res.json(tags))
+        .catch(() => res.sendStatus(500));
+});
+
 const extractLogentryParams = req => {
     const username = req.params.username;
     const date = req.params.date;

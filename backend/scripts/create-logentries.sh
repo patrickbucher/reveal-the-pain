@@ -28,3 +28,5 @@ for tag in $DAY_2
 do
     curl -i -X PUT localhost:8000/johndoe/logentry/2019-09-02/$tag
 done
+
+curl -i -X GET localhost:8000/johndoe/tags
