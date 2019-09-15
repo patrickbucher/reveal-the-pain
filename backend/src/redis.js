@@ -33,6 +33,10 @@ class RedisStorage {
             return Array.from(tags);
         });
     }
+    getUserDateTags(username, date) {
+        const key = `${username}:${date}`;
+        return this.smembers(key);
+    }
     quit() {
         client.quit();
     }

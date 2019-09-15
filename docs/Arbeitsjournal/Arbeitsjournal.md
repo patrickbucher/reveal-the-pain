@@ -9,4 +9,4 @@
 | 13.09.2019 |     1.0 | Backend      | Durchstich imt Express.js und Redis: Log-Eintrag erfassen        |
 | 13.09.2019 |     1.0 | Backend      | Validierungsfunktionen mit Testfällen entwickelt                 |
 | 15.09.2019 |     0.5 | Backend      | Löschfunktion für Log-Einträge umgesetzt                         |
-| 15.09.2019 |     1.0 | Backend      | Tags aller Log-Einträge eines Benutzers ermitteln                |
+| 15.09.2019 |     1.0 | Backend      | Tags aller Log-Einträge eines Benutzers und pro Datum ermitteln  |

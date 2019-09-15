@@ -44,8 +44,27 @@ app.get('/:username/tags', (req, res) => {
     if (!validUsername(username)) {
         console.log(`invalid username ${username}`);
         res.sendStatus(400);
+        return;
     }
     storage.getUserTags(username)
+        .then(tags => res.json(tags))
+        .catch(() => res.sendStatus(500));
+});
+
+app.get('/:username/:date/tags', (req, res) => {
+    const username = req.params.username;
+    if (!validUsername(username)) {
+        console.log(`invalid username ${username}`);
+        res.sendStatus(400);
+        return
+    }
+    const date = req.params.date;
+    if (!validDate(date)) {
+        console.log(`invalid date ${date}`);
+        res.sendStatus(400);
+        return
+    }
+    storage.getUserDateTags(username, date)
         .then(tags => res.json(tags))
         .catch(() => res.sendStatus(500));
 });
