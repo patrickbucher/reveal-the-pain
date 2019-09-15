@@ -1,3 +1,5 @@
+'use strict';
+
 const [validDate, validUsername, validTag] = require('./validator');
 
 test('the date format must be YYYY-MM-DD', () => {

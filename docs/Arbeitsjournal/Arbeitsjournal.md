@@ -10,3 +10,4 @@
 | 13.09.2019 |     1.0 | Backend      | Validierungsfunktionen mit Testfällen entwickelt                 |
 | 15.09.2019 |     0.5 | Backend      | Löschfunktion für Log-Einträge umgesetzt                         |
 | 15.09.2019 |     1.0 | Backend      | Tags aller Log-Einträge eines Benutzers und pro Datum ermitteln  |
+| 15.09.2019 |     1.5 | Backend      | Map von Datum auf Tagliste erstellen                             |

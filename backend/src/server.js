@@ -3,6 +3,7 @@
 const express = require('express');
 const RedisStorage = require('./redis');
 const [validDate, validUsername, validTag] = require('./validator');
+const categorize = require('./correlation');
 
 const PORT = process.env.PORT || '8000';
 const HOST = '0.0.0.0';
@@ -67,6 +68,35 @@ app.get('/:username/:date/tags', (req, res) => {
     storage.getUserDateTags(username, date)
         .then(tags => res.json(tags))
         .catch(() => res.sendStatus(500));
+});
+
+app.get('/:username/correlation/:tag', (req, res) => {
+    const username = req.params.username;
+    if (!validUsername(username)) {
+        console.log(`invalid username ${username}`);
+        res.sendStatus(400);
+        return
+    }
+    const tag = req.params.tag;
+    storage.getUserTags(username).then(tags => {
+        if (!tags.includes(tag)) {
+            throw new Error(`${username} has no tag ${tag}`);
+        }
+    }).then(() => {
+        return storage.getUserDates(username);
+    }).then(dates => {
+        return Promise.all(dates.map(date => {
+            const tagsProm = storage.getUserDateTags(username, date);
+            return tagsProm.then(tags => { return {date, tags}; });
+        }));
+    }).then(dateTags => {
+        const categories = categorize(tag, dateTags);
+        res.sendStatus(418);
+    }).catch(err => {
+        console.log(err)
+        res.sendStatus(400);
+    });
+
 });
 
 const extractLogentryParams = req => {

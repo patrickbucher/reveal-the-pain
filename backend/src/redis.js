@@ -1,3 +1,5 @@
+'use strict';
+
 const redis = require('redis');
 const {promisify} = require('util');
 
@@ -36,6 +38,12 @@ class RedisStorage {
     getUserDateTags(username, date) {
         const key = `${username}:${date}`;
         return this.smembers(key);
+    }
+    getUserDates(username) {
+        const pattern = `${username}*`;
+        return this.keys(pattern).then(result => {
+            return Promise.all(result.map(key => key.split(':')[1]));
+        });
     }
     quit() {
         client.quit();

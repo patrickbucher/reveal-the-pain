@@ -1,3 +1,5 @@
+'use strict';
+
 function validDate(dateStr) {
     const parts = dateStr.split('-');
     if (parts.length !== 3) {
