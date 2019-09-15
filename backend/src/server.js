@@ -16,16 +16,39 @@ app.get('/canary', (req, res) => {
 });
 
 app.put('/:username/logentry/:date/:tag', (req, res) => {
+    try {
+        const {username, date, tag} = extractLogentryParams(req);
+        storage.createLogentry(username, date, tag)
+            .then(() => res.sendStatus(201))
+            .catch(() => res.sendStatus(500));
+    } catch(err) {
+        console.log(err.message);
+        res.sendStatus(400);
+    }
+});
+
+app.delete('/:username/logentry/:date/:tag', (req, res) => {
+    try {
+        const {username, date, tag} = extractLogentryParams(req);
+        storage.deleteLogentry(username, date, tag)
+            .then(() => res.sendStatus(200))
+            .catch(() => res.sendStatus(500));
+    } catch(err) {
+        console.log(err.message);
+        res.sendStatus(400);
+    }
+});
+
+const extractLogentryParams = req => {
     const username = req.params.username;
     const date = req.params.date;
     const tag = req.params.tag;
+    // TODO: more specific error message (what input was invalid?)
     if (!validUsername(username) || !validDate(date) || !validTag(tag)) {
-        res.sendStatus(400);
+        throw new Error("invalid input data");
     }
-    storage.createLogentry(username, date, tag)
-        .then(() => res.sendStatus(201))
-        .catch(() => res.sendStatus(500));
-});
+    return {username, date, tag};
+}
 
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);

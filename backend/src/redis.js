@@ -6,10 +6,15 @@ class RedisStorage {
         this.client = redis.createClient(address);
         this.get = promisify(this.client.get).bind(this.client);
         this.sadd = promisify(this.client.sadd).bind(this.client);
+        this.srem = promisify(this.client.srem).bind(this.client);
     }
     createLogentry(username, date, tag) {
         const key = `${username}:${date}`;
         return this.sadd(key, tag);
+    }
+    deleteLogentry(username, date, tag) {
+        const key = `${username}:${date}`;
+        return this.srem(key, tag);
     }
     quit() {
         client.quit();
