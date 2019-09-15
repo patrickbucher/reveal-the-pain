@@ -1,19 +1,30 @@
 #!/bin/sh
 
-username='paedu'
-date='2019-09-01'
+read -r -d '' DAY_1 << EOM
+DrankBeer
+SleptTooLittle
+Stress
+BadWeather
+LunchAtMcDonalds
+Headache
+Backache
+EOM
 
-# 201: Created
-curl -i -X PUT localhost:8000/${username}/logentry/${date}/TooLittleSleep
-curl -i -X PUT localhost:8000/${username}/logentry/${date}/SmokedCigarettes
-curl -i -X PUT localhost:8000/${username}/logentry/${date}/DrankBeerYesterday
+for tag in $DAY_1
+do
+    curl -i -X PUT localhost:8000/johndoe/logentry/2019-09-01/$tag
+done
 
-# 400: Bad Request
-curl -i -X PUT localhost:8000/wrong-user/logentry/${date}/EatenTooMuch
-curl -i -X PUT localhost:8000/${username}/logentry/01.01.2000/WrongDateUsed
-curl -i -X PUT localhost:8000/${username}/logentry/${date}/illegal-tag-format
+read -r -d '' DAY_2 << EOM
+LongWalk
+DrankWater
+MagnesiumPill
+NiceWeather
+Backache
+StressAtWork
+EOM
 
-# 200: OK (Deleted)
-curl -i -X DELETE  localhost:8000/${username}/logentry/${date}/TooLittleSleep
-curl -i -X DELETE localhost:8000/${username}/logentry/${date}/SmokedCigarettes
-curl -i -X DELETE localhost:8000/${username}/logentry/${date}/DrankBeerYesterday
+for tag in $DAY_2
+do
+    curl -i -X PUT localhost:8000/johndoe/logentry/2019-09-02/$tag
+done
