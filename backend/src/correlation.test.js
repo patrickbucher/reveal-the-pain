@@ -1,48 +1,50 @@
 'use strict';
 
-const [categorize, uniqueTags] = require('./correlation.js');
+const [phiCorrelation, categorize, uniqueTags] = require('./correlation.js');
 
 function createTestData() {
-    const dateTags = new Map();
+    const journal = new Map();
 
-    dateTags.set('2019-01-01', ['Beer', 'Headache']);
-    dateTags.set('2019-01-02', ['Beer', 'Headache']);
-    dateTags.set('2019-01-03', ['Beer']);
-    dateTags.set('2019-01-04', ['Beer', 'Headache']);
-    dateTags.set('2019-01-05', ['Beer', 'Headache']);
-    dateTags.set('2019-01-06', ['Headache']);
-    dateTags.set('2019-01-07', ['Wine', 'Sleepiness']);
-    dateTags.set('2019-01-08', ['Beer', 'Sleepiness']);
-    dateTags.set('2019-01-09', ['Wine', 'Headache']);
-    dateTags.set('2019-01-10', ['Water', 'Headache']);
+    journal.set('2019-01-01', ['Beer', 'Headache']);
+    journal.set('2019-01-02', ['Beer', 'Headache']);
+    journal.set('2019-01-03', ['Beer']);
+    journal.set('2019-01-04', ['Beer', 'Headache']);
+    journal.set('2019-01-05', ['Beer', 'Headache']);
+    journal.set('2019-01-06', ['Headache']);
+    journal.set('2019-01-07', ['Wine', 'Sleepiness']);
+    journal.set('2019-01-08', ['Beer', 'Sleepiness']);
+    journal.set('2019-01-09', ['Wine', 'Headache']);
+    journal.set('2019-01-10', ['Water', 'Headache']);
 
-    return dateTags;
+    return journal;
 }
 
-test('flatten dateTags map to unique list of tags', () => {
+test('calculate phi correlation', () => {
     // Arrange
-    const dateTags = createTestData();
-    const allTags = new Set(['Beer', 'Headache', 'Wine', 'Sleepiness', 'Water']);
+    const effectTag = 'Headache';
+    const journal = createTestData();
 
     // Act
-    const got = uniqueTags(dateTags);
-    
+    for (let t of uniqueTags(journal)) {
+        if (t == effectTag) {
+            continue;
+        }
+        const corr = phiCorrelation(t, effectTag, journal);
+        console.log(t, corr);
+    }
+
     // Assert
-    expect(got.has('Beer')).toBe(true);
-    expect(got.has('Headache')).toBe(true);
-    expect(got.has('Wine')).toBe(true);
-    expect(got.has('Sleepiness')).toBe(true);
-    expect(got.has('Water')).toBe(true);
-    expect(got.size).toBe(allTags.size);
+    // TODO
 });
 
+// TODO: write additional tests for Wine and Water
 test('categorize date tags correctly for tag', () => {
     // Arrange
     const targetTag = 'Headache';
-    const dateTags = createTestData();
+    const journal = createTestData();
 
     // Act
-    const categories = categorize(targetTag, dateTags);
+    const categories = categorize(targetTag, journal);
     
     // Assert
     // category 00=0: neither Headache nor Beer
@@ -56,4 +58,21 @@ test('categorize date tags correctly for tag', () => {
 
     // category 11=3: Headache and Beer
     expect(categories.get('Beer')[3]).toBe(4); // four times: 2019-01-01/02/04/05
+});
+
+test('flatten journal map to unique list of tags', () => {
+    // Arrange
+    const journal = createTestData();
+    const allTags = new Set(['Beer', 'Headache', 'Wine', 'Sleepiness', 'Water']);
+
+    // Act
+    const got = uniqueTags(journal);
+    
+    // Assert
+    expect(got.has('Beer')).toBe(true);
+    expect(got.has('Headache')).toBe(true);
+    expect(got.has('Wine')).toBe(true);
+    expect(got.has('Sleepiness')).toBe(true);
+    expect(got.has('Water')).toBe(true);
+    expect(got.size).toBe(allTags.size);
 });

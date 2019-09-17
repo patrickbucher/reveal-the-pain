@@ -12,4 +12,4 @@
 | 15.09.2019 |     1.0 | Backend      | Tags aller Log-Einträge eines Benutzers und pro Datum ermitteln  |
 | 15.09.2019 |     1.5 | Backend      | Map von Datum auf Tagliste erstellen                             |
 | 15.09.2019 |     0.5 | Backend      | Testfall für Kategorisierung der Tag-Korrelation schrieben       |
-| 17.09.2019 |     0.7 | Backend      | Kategorisierung für Tag-Korrelation implementiert                |
+| 17.09.2019 |     1.0 | Backend      | Kategorisierung und Phi-Funktion für Tag-Korrelation umgesetzt   |
