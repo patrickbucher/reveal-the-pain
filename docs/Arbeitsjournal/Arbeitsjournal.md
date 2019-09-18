@@ -13,3 +13,4 @@
 | 15.09.2019 |     1.5 | Backend      | Map von Datum auf Tagliste erstellen                             |
 | 15.09.2019 |     0.5 | Backend      | Testfall für Kategorisierung der Tag-Korrelation schrieben       |
 | 17.09.2019 |     1.0 | Backend      | Kategorisierung und Phi-Funktion für Tag-Korrelation umgesetzt   |
+| 18.09.2019 |     0.5 | Backend      | Korrekturen an Kategorisierung und Tag-Korrelation vorgenommen   |
