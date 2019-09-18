@@ -3,18 +3,20 @@
 function phiCorrelation(causeTag, effectTag, journal) {
     const categories = categorize(effectTag, journal);
     const t = categories.get(causeTag);
-    console.log(t);
     return (t[3] * t[0] - t[2] * t[1]) /
-        Math.sqrt((t[2] + t[3]) * (t[0] + t[1]) * (t[1] + t[3]) * t[0] + t[2]);
+        Math.sqrt((t[2] + t[3]) * (t[0] + t[1]) * (t[1] + t[3]) * (t[0] + t[2]));
 }
 
+// Quadrants:
+// | 00=0 | 01=1 |
+// | 10=2 | 11=3 |
 function categorize(targetTag, journal) {
     const categories = new Map();
     const allTags = uniqueTags(journal);
     for (const [today, todaysTags] of journal) {
         // present: high index (2 or 3), absent: low index (0 or 1)
-        let index = todaysTags.includes(targetTag) ? 2 : 0;
         for (const tag of allTags) {
+            let index = todaysTags.includes(targetTag) ? 2 : 0;
             if (targetTag == tag) {
                 // do not correlate with itself
                 continue;
@@ -24,7 +26,9 @@ function categorize(targetTag, journal) {
                 categoryCounts = categories.get(tag);
             }
             // present: odd index, absent: even index
-            index += todaysTags.includes(tag) ? 1 : 0;
+            if (todaysTags.includes(tag)) {
+                index++;
+            }
             categoryCounts[index] += 1;
             categories.set(tag, categoryCounts);
         }

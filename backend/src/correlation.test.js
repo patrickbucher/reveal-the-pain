@@ -24,20 +24,19 @@ test('calculate phi correlation', () => {
     const effectTag = 'Headache';
     const journal = createTestData();
 
-    // Act
     for (let t of uniqueTags(journal)) {
+        // Act
         if (t == effectTag) {
             continue;
         }
         const corr = phiCorrelation(t, effectTag, journal);
-        console.log(t, corr);
-    }
 
-    // Assert
-    // TODO
+        // Assert
+        expect(corr).toBeGreaterThanOrEqual(-1);
+        expect(corr).toBeLessThanOrEqual(1);
+    }
 });
 
-// TODO: write additional tests for Wine and Water
 test('categorize date tags correctly for tag', () => {
     // Arrange
     const targetTag = 'Headache';
