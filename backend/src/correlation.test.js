@@ -1,8 +1,8 @@
 'use strict';
 
-const [phiCorrelation, categorize, uniqueTags] = require('./correlation.js');
+const [correlate, phiCorrelation, categorize, uniqueTags] = require('./correlation.js');
 
-function createTestData() {
+function createJournal() {
     const journal = new Map();
 
     journal.set('2019-01-01', ['Beer', 'Headache']);
@@ -19,10 +19,28 @@ function createTestData() {
     return journal;
 }
 
-test('calculate phi correlation', () => {
+test('calculate all the correlations for the journal', () => {
     // Arrange
     const effectTag = 'Headache';
-    const journal = createTestData();
+    const otherTags = ['Beer', 'Wine', 'Sleepiness', 'Water'];
+    const journal = createJournal();
+
+    // Act
+    const correlations = correlate(effectTag, journal);
+
+    // Assert
+    expect(correlations.size).toBe(otherTags.length);
+    for (const tag of otherTags) {
+        expect(correlations.has(tag)).toBe(true);
+        expect(correlations.get(tag)).toBeGreaterThanOrEqual(-1);
+        expect(correlations.get(tag)).toBeLessThanOrEqual(1);
+    }
+});
+
+test('calculate a single phi correlation', () => {
+    // Arrange
+    const effectTag = 'Headache';
+    const journal = createJournal();
 
     for (let t of uniqueTags(journal)) {
         // Act
@@ -40,7 +58,7 @@ test('calculate phi correlation', () => {
 test('categorize date tags correctly for tag', () => {
     // Arrange
     const targetTag = 'Headache';
-    const journal = createTestData();
+    const journal = createJournal();
 
     // Act
     const categories = categorize(targetTag, journal);
@@ -61,7 +79,7 @@ test('categorize date tags correctly for tag', () => {
 
 test('flatten journal map to unique list of tags', () => {
     // Arrange
-    const journal = createTestData();
+    const journal = createJournal();
     const allTags = new Set(['Beer', 'Headache', 'Wine', 'Sleepiness', 'Water']);
 
     // Act

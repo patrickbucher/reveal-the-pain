@@ -1,5 +1,19 @@
 'use strict';
 
+function correlate(effectTag, journal) {
+    const correlations = new Map();
+    const categories = categorize(effectTag, journal);
+    const tags = uniqueTags(journal);
+    for (const tag of tags) {
+        if (tag === effectTag) {
+            continue;
+        }
+        const corr = phiCorrelation(tag, effectTag, journal);
+        correlations.set(tag, corr);
+    }
+    return correlations;
+}
+
 function phiCorrelation(causeTag, effectTag, journal) {
     const categories = categorize(effectTag, journal);
     const t = categories.get(causeTag);
@@ -46,4 +60,4 @@ function uniqueTags(journal) {
     return uniqueTags;
 }
 
-module.exports = [phiCorrelation, categorize, uniqueTags];
+module.exports = [correlate, phiCorrelation, categorize, uniqueTags];
