@@ -72,11 +72,4 @@ do
     curl -i -X PUT localhost:8000/johndoe/logentry/2019-09-05/$tag
 done
 
-#curl -i -X GET localhost:8000/johndoe/tags
-#curl -i -X GET localhost:8000/johndoe/2019-09-01/tags
-#curl -i -X GET localhost:8000/johndoe/2019-09-02/tags
-#curl -i -X GET localhost:8000/johndoe/2019-09-03/tags
-#curl -i -X GET localhost:8000/johndoe/2019-09-04/tags
-#curl -i -X GET localhost:8000/johndoe/2019-09-05/tags
-
 curl -i -X GET localhost:8000/johndoe/correlation/Headache
