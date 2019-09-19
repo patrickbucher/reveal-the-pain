@@ -3,7 +3,7 @@
 const express = require('express');
 const RedisStorage = require('./redis');
 const [validDate, validUsername, validTag] = require('./validator');
-const categorize = require('./correlation');
+const [correlate] = require('./correlation');
 
 const PORT = process.env.PORT || '8000';
 const HOST = '0.0.0.0';
@@ -90,8 +90,17 @@ app.get('/:username/correlation/:tag', (req, res) => {
             return tagsProm.then(tags => { return {date, tags}; });
         }));
     }).then(dateTags => {
-        const categories = categorize(tag, dateTags);
-        res.sendStatus(418);
+        const journal = new Map();
+        dateTags.forEach(({date, tags}) => journal.set(date, tags));
+        const correlations = correlate(tag, journal);
+        const table = new Array();
+        for (const [tag, correlation] of correlations.entries()) {
+            if (isNaN(correlation)) {
+                continue;
+            }
+            table.push({tag, correlation});
+        }
+        return res.json(table);
     }).catch(err => {
         console.log(err)
         res.sendStatus(400);
@@ -103,9 +112,19 @@ const extractLogentryParams = req => {
     const username = req.params.username;
     const date = req.params.date;
     const tag = req.params.tag;
-    // TODO: more specific error message (what input was invalid?)
-    if (!validUsername(username) || !validDate(date) || !validTag(tag)) {
-        throw new Error("invalid input data");
+    const invalidFields = new Array();
+    if (!validUsername(username)) {
+        invalidFields.push('username');
+    }
+    if (!validUsername(date)) {
+        invalidFields.push('date');
+    }
+    if (!validUsername(tag)) {
+        invalidFields.push('tag');
+    }
+    if (invalidFields.size > 0) {
+        const fields = invalidFields.join(', ');
+        throw new Error(`invalid input data: ${fields}`);
     }
     return {username, date, tag};
 }
