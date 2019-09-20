@@ -1,22 +1,52 @@
 'use strict';
 
 const express = require('express');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const bodyParser = require('body-parser');
+
 const RedisStorage = require('./redis');
 const [validDate, validUsername, validTag] = require('./validator');
 const [correlate] = require('./correlation');
+const [credentials, secretKey] = require('./credentials');
 
 const PORT = process.env.PORT || '8000';
 const HOST = '0.0.0.0';
 const REDIS = 'redis://' + (process.env.REDIS || 'localhost:6379');
 
 const app = express();
+app.use(bodyParser.json());
 const storage = new RedisStorage(REDIS);
 
+const hashedCredentials = new Map();
+for (const [username, password] of credentials.entries()) {
+    const hash = bcrypt.hashSync(password, 10);
+    hashedCredentials.set(username, hash);
+}
+
+// NOTE: the canary endpoint is public, no authentication required
 app.get('/canary', (req, res) => {
     res.sendStatus(200);
 });
 
+app.post('/token', (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    const result = bcrypt.compareSync(password, hashedCredentials.get(username));
+    if (result) {
+        const expiry = 5 * 60;
+        const token = jwt.sign({sub: username}, secretKey, {expiresIn: expiry});
+        res.send({'access_token': token});
+    } else {
+        res.sendStatus(401);
+    }
+});
+
 app.put('/:username/logentry/:date/:tag', (req, res) => {
+    if (!authenticated(req)) {
+        res.sendStatus(401);
+        return;
+    }
     try {
         const {username, date, tag} = extractLogentryParams(req);
         storage.createLogentry(username, date, tag)
@@ -29,6 +59,10 @@ app.put('/:username/logentry/:date/:tag', (req, res) => {
 });
 
 app.delete('/:username/logentry/:date/:tag', (req, res) => {
+    if (!authenticated(req)) {
+        res.sendStatus(401);
+        return;
+    }
     try {
         const {username, date, tag} = extractLogentryParams(req);
         storage.deleteLogentry(username, date, tag)
@@ -41,6 +75,10 @@ app.delete('/:username/logentry/:date/:tag', (req, res) => {
 });
 
 app.get('/:username/tags', (req, res) => {
+    if (!authenticated(req)) {
+        res.sendStatus(401);
+        return;
+    }
     const username = req.params.username;
     if (!validUsername(username)) {
         console.log(`invalid username ${username}`);
@@ -53,6 +91,10 @@ app.get('/:username/tags', (req, res) => {
 });
 
 app.get('/:username/:date/tags', (req, res) => {
+    if (!authenticated(req)) {
+        res.sendStatus(401);
+        return;
+    }
     const username = req.params.username;
     if (!validUsername(username)) {
         console.log(`invalid username ${username}`);
@@ -71,6 +113,10 @@ app.get('/:username/:date/tags', (req, res) => {
 });
 
 app.get('/:username/correlation/:tag', (req, res) => {
+    if (!authenticated(req)) {
+        res.sendStatus(401);
+        return;
+    }
     const username = req.params.username;
     if (!validUsername(username)) {
         console.log(`invalid username ${username}`);
@@ -107,6 +153,33 @@ app.get('/:username/correlation/:tag', (req, res) => {
     });
 
 });
+
+const authenticated = (req) => {
+    const username = req.params.username;
+    if (!validUsername(username)) {
+        return false;
+    }
+    // Authentication: Bearer xxxxxxxxxxxxxxxxxxxxxxxxx
+    const auth = req.headers.authorization;
+    if (auth == undefined) {
+        return false;
+    }
+    // Bearer xxxxxxxxxxxxxxxxxxxxxxxxx
+    const token = auth.substr(auth.indexOf(' ')).trim();
+    if (token == '') {
+        return false;
+    }
+    try {
+        const result = jwt.verify(token, secretKey);
+        if (result) {
+            return result.sub === username;
+        }
+        return false;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
 
 const extractLogentryParams = req => {
     const username = req.params.username;
