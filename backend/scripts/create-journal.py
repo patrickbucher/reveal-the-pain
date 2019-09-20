@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
-# TODO: extend for JWT
-
+import json
 import requests
+import sys
 
-username = 'johndoe'
 journal = {
     '2019-09-01': [
         'EnoughSleep',
@@ -68,15 +67,28 @@ journal = {
     ]
 }
 
-logentry_endpoint = 'http://localhost:8000/{:s}/logentry/{:s}/{:s}'
+base_endpoint = 'http://localhost:8000/'
+username = 'johndoe'
+password = 'topsecret1337'
 
+token_endpoint = base_endpoint + 'token'
+payload = json.dumps({'username': username, 'password': password})
+headers = {'Content-Type': 'application/json'}
+res = requests.post(token_endpoint, data=payload, headers=headers)
+if res.status_code != 200:
+    print('auth failed')
+    sys.exit()
+access_token = res.json()['access_token']
+auth_header = {'Authorization': 'Bearer ' + access_token}
+
+logentry_endpoint = base_endpoint + '{:s}/logentry/{:s}/{:s}'
 for date in journal:
     tags = journal[date]
     for tag in tags:
         url = logentry_endpoint.format(username, date, tag)
-        requests.put(url)
+        requests.put(url, headers=auth_header)
 
-correlation_endpoint = 'http://localhost:8000/{:s}/correlation/{:s}'
+correlation_endpoint = base_endpoint + '{:s}/correlation/{:s}'
 url = correlation_endpoint.format(username, 'Headache')
-res = requests.get(url)
+res = requests.get(url, headers=auth_header)
 print(res.json())
