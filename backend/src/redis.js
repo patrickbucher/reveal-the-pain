@@ -6,12 +6,18 @@ const {promisify} = require('util');
 class RedisStorage {
     constructor(address) {
         this.client = redis.createClient(address);
-        // TODO: do this in a for loop
-        this.get = promisify(this.client.get).bind(this.client);
-        this.sadd = promisify(this.client.sadd).bind(this.client);
-        this.srem = promisify(this.client.srem).bind(this.client);
-        this.keys = promisify(this.client.keys).bind(this.client);
-        this.smembers = promisify(this.client.smembers).bind(this.client);
+        this.client.on('error', () => {
+            console.log(`unable to connect to ${address}`);
+        });
+        this.client.on('ready', () => {
+            console.log(`connected to ${address}`);
+            // TODO: do this in a for loop
+            this.get = promisify(this.client.get).bind(this.client);
+            this.sadd = promisify(this.client.sadd).bind(this.client);
+            this.srem = promisify(this.client.srem).bind(this.client);
+            this.keys = promisify(this.client.keys).bind(this.client);
+            this.smembers = promisify(this.client.smembers).bind(this.client);
+        });
     }
     createLogentry(username, date, tag) {
         const key = `${username}:${date}`;

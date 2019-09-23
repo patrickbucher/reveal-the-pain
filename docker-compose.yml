@@ -15,7 +15,6 @@ services:
       - REDIS=redis:6379
     depends_on:
       - redis
-    command: 'node server.js'
   frontend:
     image: nginx:1.17.3-alpine
     ports:

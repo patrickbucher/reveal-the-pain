@@ -11,12 +11,11 @@
   "author": "",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
+    "jest": "^24.9.0",
+    "jsonwebtoken": "^8.5.1",
     "redis": "^2.8.0"
   },
-  "devDependencies": {
-    "bcryptjs": "^2.4.3",
-    "jest": "^24.9.0",
-    "jsonwebtoken": "^8.5.1"
-  }
+  "devDependencies": {}
 }
