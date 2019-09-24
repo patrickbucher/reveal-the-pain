@@ -1,4 +1,19 @@
 body {
     font-family: sans-serif;
-    text-size: 16px;
+    font-size: 13pt;
+    min-width: 600px;
+    max-width: 1000px;
+    margin: 1em auto;
+    padding: 1em;
+}
+
+footer {
+    font-size: 10pt;
+}
+
+label {
+    display: inline-block;
+    width: 150px;
+    text-align: right;
+    margin-right: 1em;
 }

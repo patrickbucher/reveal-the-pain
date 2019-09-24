@@ -21,4 +21,5 @@
 | 20.09.2019 |     0.5 | Backend       | Testdaten-Skripts um AuthN/AuthZ erweitert                       |
 | 22.09.2019 |     1.0 | Dokumentation | Berechnung des Phi-Koeffizienten dokumentiert                    |
 | 23.09.2019 |     1.0 | Deployment    | Frontend-Deployment erstellt; Abhängigkeiten definiert           |
-| 23.09.2019 |     1.0 | Deployment    | Backend erst nach Redis aufstarten; Verbindung umkonfiguriert    |  |
+| 23.09.2019 |     1.0 | Deployment    | Backend erst nach Redis aufstarten; Verbindung umkonfiguriert    |
+| 24.09.2019 |     1.0 | Frontend      | User-Interface aufgebaut; Login-Formular erstellt; Login-Request |

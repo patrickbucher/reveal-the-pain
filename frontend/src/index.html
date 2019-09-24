@@ -7,8 +7,34 @@
         <link rel="icon" href="favicon.ico" type="image/x-icon">
     </head>
     <body>
-        <h1>Reveal the Pain</h1>
-        <p>Or die...</p>
+        <header>
+            <h1>Reveal the Pain</h1>
+        </header>
+        <nav>
+            <ul>
+                <li id="navLogin"><a href="#">Login</a></li>
+                <li id="navLogout"><a href="#">Logout</a></li>
+            </ul>
+        </nav>
+        <main>
+            <section id="secLogin">
+                <h2>Login</h2>
+                <form name="loginForm" id="loginForm">
+                    <p><label for="username">Username</label><input type="text" name="username" id="usernameField"></p>
+                    <p><label for="password">Password</label><input type="password" name="password" id="passwordField"></p>
+                    <p><label></label><input type="button" id="loginButton" value="Login"></p>
+                </form>
+            </section>
+            <section id="secJournal">
+                <h2>Journal</h2>
+            </section>
+            <section id="secReport">
+                <h2>Report</h2>
+            </section>
+        </main>
+        <footer>
+            <p>© 2019 by Patrick Bucher (<a href="https://github.com/patrickbucher/reveal-the-pain" target="blank">GitHub</a>)</p>
+        </footer>
         <script src="script.js"></script>
     </body>
 </html>

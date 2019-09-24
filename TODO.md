@@ -1,0 +1,1 @@
+- [ ] CORS issue: Allow Origin localhost:8000 from fronten
