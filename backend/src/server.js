@@ -4,6 +4,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const RedisStorage = require('./redis');
 const [validDate, validUsername, validTag] = require('./validator');
@@ -16,6 +17,10 @@ const REDIS = 'redis://' + (process.env.REDIS || 'localhost:6379');
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors({
+    origin: 'http://localhost:8080'
+}));
+
 const storage = new RedisStorage(REDIS);
 
 const hashedCredentials = new Map();
