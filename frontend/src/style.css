@@ -17,3 +17,9 @@ label {
     text-align: right;
     margin-right: 1em;
 }
+
+nav li {
+	list-style-type: none;
+	display: inline-block;
+	padding: 0 1em;
+}

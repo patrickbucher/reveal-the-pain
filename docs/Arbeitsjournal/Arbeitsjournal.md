@@ -24,3 +24,4 @@
 | 23.09.2019 |     1.0 | Deployment    | Backend erst nach Redis aufstarten; Verbindung umkonfiguriert    |
 | 24.09.2019 |     1.0 | Frontend      | User-Interface aufgebaut; Login-Formular erstellt; Login-Request |
 | 24.09.2019 |     0.5 | Backend       | CORS konfiguriert für lokales Deployment                         |
+| 25.09.2019 |     1.0 | Frontend      | Login/Logout und Navigation (Single Pager) umgesetzt             |
