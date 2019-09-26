@@ -88,6 +88,16 @@ for date in journal:
         url = logentry_endpoint.format(username, date, tag)
         requests.put(url, headers=auth_header)
 
+tags_endpoint = base_endpoint + '{:s}/tags'
+url = tags_endpoint.format(username)
+res = requests.get(url, headers=auth_header)
+print(res.json())
+
+dates_endpoint = base_endpoint + '{:s}/dates'
+url = dates_endpoint.format(username)
+res = requests.get(url, headers=auth_header)
+print(res.json())
+
 correlation_endpoint = base_endpoint + '{:s}/correlation/{:s}'
 url = correlation_endpoint.format(username, 'Headache')
 res = requests.get(url, headers=auth_header)

@@ -80,20 +80,27 @@ app.delete('/:username/logentry/:date/:tag', (req, res) => {
 });
 
 app.get('/:username/tags', (req, res) => {
-    if (!authenticated(req)) {
-        res.sendStatus(401);
+    const httpStatus = authenticatedValidUser(req);
+    if (httpStatus != 200) {
+        res.sendStatus(httpStatus);
         return;
     }
-    const username = req.params.username;
-    if (!validUsername(username)) {
-        console.log(`invalid username ${username}`);
-        res.sendStatus(400);
-        return;
-    }
-    storage.getUserTags(username)
+    storage.getUserTags(req.params.username)
         .then(tags => res.json(tags))
         .catch(() => res.sendStatus(500));
 });
+
+app.get('/:username/dates', (req, res) => {
+    const httpStatus = authenticatedValidUser(req);
+    if (httpStatus != 200) {
+        res.sendStatus(httpStatus);
+        return;
+    }
+    storage.getUserDates(req.params.username)
+        .then(dates => res.json(dates))
+        .catch(() => res.sendStatus(500));
+});
+
 
 app.get('/:username/:date/tags', (req, res) => {
     if (!authenticated(req)) {
@@ -158,6 +165,18 @@ app.get('/:username/correlation/:tag', (req, res) => {
     });
 
 });
+
+const authenticatedValidUser = (req) => {
+    if (!authenticated(req)) {
+        return 401;
+    }
+    const username = req.params.username;
+    if (!validUsername(username)) {
+        console.log(`invalid username ${username}`);
+        return 400;
+    }
+    return 200;
+};
 
 const authenticated = (req) => {
     const username = req.params.username;
