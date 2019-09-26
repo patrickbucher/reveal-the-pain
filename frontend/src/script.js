@@ -1,4 +1,6 @@
 (function() {
+	const baseUrl = 'http://localhost:8000';
+
     const usernameField = document.getElementById('usernameField');
     const passwordField = document.getElementById('passwordField');
     const loginButton = document.getElementById('loginButton');
@@ -8,12 +10,68 @@
 	const navJournal = document.getElementById('navJournal');
 	const navReport = document.getElementById('navReport');
 
-	let loggedIn = false;
+	const sectionInit = {
+		'Journal': loadJournal,
+		'Report': loadReport
+	};
 
     registerLoginEvents();
 	initializeNavigation();
-	navigateTo('Login');
-	logout();
+
+	let loggedIn = isLoggedIn();
+	if (loggedIn) {
+		navigateTo('Journal');
+		toggleNav([navLogout, navJournal, navReport], [navLogin]);
+	} else {
+		navigateTo('Login');
+		toggleNav([navLogin], [navLogout, navJournal, navReport]);
+	}
+
+	function loadJournal() {
+		// TODO: fetch 'dates' (additional endpoint needed)
+		const prom = requestWithSessionToken('tags', 'GET');
+		prom.then(response => response.json())
+			.then(console.dir);
+	}
+
+	function loadReport() {
+		console.log('TODO: load report'); // TODO
+	}
+
+	function requestWithSessionToken(userEndpoint, method) {
+		const username = sessionStorage.getItem('username');
+		if (username == null) {
+			alert('You are not logged in.');
+			navigateTo('Login');
+			return;
+		}
+		const accessToken = sessionStorage.getItem('accessToken');
+		if (accessToken == null) {
+			alert('Your token is expired.');
+			navigateTo('Login');
+			return;
+		}
+		const endpoint = `${baseUrl}/${username}/${userEndpoint}`;
+		const prom = fetch(endpoint, {
+			headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+				'Authorization': `Bearer ${accessToken}`
+			},
+			method: method
+		});
+		return prom.then(response => {
+				if (method == 'GET' && response.status == 200 ||
+					method == 'PUT' && response.status == 201) {
+					return response;
+				}
+			}).catch(err => `Error fetching ${endpoint}: ${err}`);
+	}
+
+	function isLoggedIn() {
+		const accessToken = sessionStorage.getItem('accessToken');
+		return accessToken != null;
+	}
 
     function registerLoginEvents() {
         const loginOnReturnKeyPress = () => {
@@ -43,7 +101,7 @@
 
 	function logout() {
 		loggedIn = false;
-		localStorage.removeItem('accessToken');
+		sessionStorage.removeItem('accessToken');
 		toggleNav([navLogin], [navLogout, navJournal, navReport]);
 	}
 
@@ -62,6 +120,9 @@
 			const linkTarget = extractLinkTarget(navLinkNode.href);
 			if (section == linkTarget) {
 				hideSectionsBut(section);
+				if (sectionInit[section] != undefined) {
+					sectionInit[section]();
+				}
 				break;
 			}
 		}
@@ -87,7 +148,7 @@
 	}
 
     function login() {
-        const tokenEndpoint = 'http://localhost:8000/token';
+        const tokenEndpoint = `${baseUrl}/token`;
         const username = usernameField.value;
         const password = passwordField.value;
         const loginPromise = fetch(tokenEndpoint, {
@@ -107,7 +168,8 @@
                 }
             })
             .then(body => {
-				localStorage.setItem('accessToken', body.access_token);
+				sessionStorage.setItem('username', username);
+				sessionStorage.setItem('accessToken', body.access_token);
 				loggedIn = true;
 				navigateTo('Journal');
 				toggleNav([navJournal, navReport, navLogout], [navLogin]);
