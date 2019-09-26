@@ -22,13 +22,44 @@
             <section id="secLogin">
                 <h2>Login</h2>
                 <form name="loginForm" id="loginForm">
-                    <p><label for="username">Username</label><input type="text" name="username" id="usernameField"></p>
-                    <p><label for="password">Password</label><input type="password" name="password" id="passwordField"></p>
-                    <p><label></label><input type="button" id="loginButton" value="Login"></p>
+                    <p>
+                        <label for="username">Username</label>
+                        <input type="text" name="username" id="usernameField">
+                    </p>
+                    <p>
+                        <label for="password">Password</label>
+                        <input type="password" name="password" id="passwordField">
+                    </p>
+                    <p>
+                        <label></label>
+                        <input type="button" id="loginButton" value="Login">
+                    </p>
                 </form>
             </section>
             <section id="secJournal">
                 <h2>Journal</h2>
+                <h3>Add Journal Entry</h3>
+                <form name="newJournalEntryForm" id="newJournalEntryForm">
+                    <p>
+                        <label for="date">Date</label>
+                        <input type="date" name="date" id="dateField">
+                    </p>
+                    <p>
+                        <label for="existingTag">Existing Tag</label>
+                        <select name="existingTag" id="existingTagField" size="1">
+                            <option value="dummy">dummy</option>
+                        </select>
+                    </p>
+                    <p>
+                        <label for="newTag">New Tag</label>
+                        <input type="text" name="newTag" id="newTagField">
+                    </p>
+                    <p>
+                        <label></label>
+                        <input type="button" id="addJournalEntryButton" value="Add">
+                    </p>
+                </form>
+                <h3>Existing Journal Entries</h3>
             </section>
             <section id="secReport">
                 <h2>Report</h2>

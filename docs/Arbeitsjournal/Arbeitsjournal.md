@@ -25,4 +25,7 @@
 | 24.09.2019 |     1.0 | Frontend      | User-Interface aufgebaut; Login-Formular erstellt; Login-Request |
 | 24.09.2019 |     0.5 | Backend       | CORS konfiguriert für lokales Deployment                         |
 | 25.09.2019 |     1.0 | Frontend      | Login/Logout und Navigation (Single Pager) umgesetzt             |
-| 26.09.2019 |     1.0 | Frontend      | Navigation und Session-Handling verbessert; Journal-Sektion      |
+| 26.09.2019 |     0.5 | Frontend      | Navigation und Session-Handling verbessert                       |
+| 26.09.2019 |     0.5 | Frontend      | Generische Funktion für Backend-Requests erstellt                |
+| 26.09.2019 |     0.5 | Frontend      | Formular zum Erfassen von Journaleinträgen erstellt              |
+| 26.09.2019 |     0.5 | Frontend      | Journaleinträge aufgrund neuer und bestehender Tags erstellen    |

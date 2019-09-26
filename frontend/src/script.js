@@ -5,6 +5,11 @@
     const passwordField = document.getElementById('passwordField');
     const loginButton = document.getElementById('loginButton');
 
+    const dateField = document.getElementById('dateField');
+    const existingTagField = document.getElementById('existingTagField');
+    const newTagField = document.getElementById('newTagField');
+    const addJournalEntryButton = document.getElementById('addJournalEntryButton');
+
 	const navLogin = document.getElementById('navLogin');
 	const navLogout = document.getElementById('navLogout');
 	const navJournal = document.getElementById('navJournal');
@@ -16,6 +21,7 @@
 	};
 
     registerLoginEvents();
+    registerJournalEvents();
 	initializeNavigation();
 
 	let loggedIn = isLoggedIn();
@@ -30,8 +36,25 @@
 	function loadJournal() {
 		// TODO: fetch 'dates' (additional endpoint needed)
 		const prom = requestWithSessionToken('tags', 'GET');
+        const newTagOption = (tag) => {
+            const tagOption = document.createElement('option');
+            tagOption.setAttribute('value', tag);
+            tagOption.textContent = tag;
+            return tagOption;
+        };
 		prom.then(response => response.json())
-			.then(console.dir);
+			.then(tags => {
+                let tagOption = existingTagField.lastElementChild;
+                while (tagOption) {
+                    existingTagField.removeChild(tagOption);
+                    tagOption = existingTagField.lastElementChild;
+                }
+                existingTagField.append(newTagOption(''));
+                for (const tag of tags) {
+                    existingTagField.append(newTagOption(tag));
+                }
+            })
+            .catch(console.log);
 	}
 
 	function loadReport() {
@@ -61,11 +84,16 @@
 			method: method
 		});
 		return prom.then(response => {
-				if (method == 'GET' && response.status == 200 ||
-					method == 'PUT' && response.status == 201) {
-					return response;
-				}
-			}).catch(err => `Error fetching ${endpoint}: ${err}`);
+            if (method == 'GET' && response.status == 200 ||
+                method == 'PUT' && response.status == 201) {
+                return response;
+            }
+            console.log(response);
+            if (response.status == 401) {
+                navigateTo('Login');
+            }
+
+        }).catch(err => `Error fetching ${endpoint}: ${err}`);
 	}
 
 	function isLoggedIn() {
@@ -83,6 +111,25 @@
         usernameField.addEventListener('keypress', loginOnReturnKeyPress);
         passwordField.addEventListener('keypress', loginOnReturnKeyPress);
         loginButton.addEventListener('click', login);
+    }
+
+    function registerJournalEvents() {
+        // TODO: test with other locales if date format stays the same
+        const addJournalEntry = () => {
+            const date = dateField.value;
+            const tag = newTagField.value.trim() != '' ?
+                newTagField.value : existingTagField.value;
+            const endpoint = `logentry/${date}/${tag}`;
+            const prom = requestWithSessionToken(endpoint, 'PUT');
+            prom.then(newTagField.value = '').catch(alert);
+        };
+        addJournalEntryButton.addEventListener('click', addJournalEntry);
+        existingTagField.addEventListener('change', () => {
+            newTagField.value = '';
+        });
+        newTagField.addEventListener('keypress', () => {
+            existingTagField.value = '';
+        });
     }
 
 	function initializeNavigation() {
@@ -103,6 +150,7 @@
 		loggedIn = false;
 		sessionStorage.removeItem('accessToken');
 		toggleNav([navLogin], [navLogout, navJournal, navReport]);
+        navigateTo('Login');
 	}
 
 	function toggleNav(showNavs, hideNavs) {
