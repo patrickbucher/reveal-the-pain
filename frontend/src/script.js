@@ -10,6 +10,8 @@
     const newTagField = document.getElementById('newTagField');
     const addJournalEntryButton = document.getElementById('addJournalEntryButton');
 
+	const journalList = document.getElementById('journalList');
+
 	const navLogin = document.getElementById('navLogin');
 	const navLogout = document.getElementById('navLogout');
 	const navJournal = document.getElementById('navJournal');
@@ -34,27 +36,86 @@
 	}
 
 	function loadJournal() {
-		// TODO: fetch 'dates' (additional endpoint needed)
-		const prom = requestWithSessionToken('tags', 'GET');
+		fetchTags();
+		fetchJournal();
+	}
+
+	function fetchTags() {
         const newTagOption = (tag) => {
             const tagOption = document.createElement('option');
             tagOption.setAttribute('value', tag);
             tagOption.textContent = tag;
             return tagOption;
         };
+		const prom = requestWithSessionToken('tags', 'GET');
 		prom.then(response => response.json())
 			.then(tags => {
-                let tagOption = existingTagField.lastElementChild;
-                while (tagOption) {
-                    existingTagField.removeChild(tagOption);
-                    tagOption = existingTagField.lastElementChild;
-                }
+				tags.sort();
+				deleteAllChildren(existingTagField);
                 existingTagField.append(newTagOption(''));
                 for (const tag of tags) {
                     existingTagField.append(newTagOption(tag));
                 }
             })
             .catch(console.log);
+	}
+
+	function fetchJournal() {
+		const newJournalEntry = (date) => {
+			console.log(date);
+		}
+		const prom = requestWithSessionToken('dates', 'GET');
+		prom.then(response => response.json())
+			.then(dates => {
+				deleteAllChildren(journalList);
+				dates.sort();
+				dates.reverse(); // newest on top
+				const tagProms = [];
+				const journalEntries = new Map();
+				for (const date of dates) {
+					const resource = `${date}/tags`;
+					const tagsProm = requestWithSessionToken(resource, 'GET');
+					const resProm = tagsProm
+						.then(response => response.json())
+						.then(dateTags => {
+							journalEntries.set(date, dateTags);
+						})
+						.catch(console.log);
+					tagProms.push(resProm);
+				}
+				Promise.all(tagProms).then(() => {
+					const sorted = [...journalEntries.entries()].sort().reverse();
+					let sortedJournalEntries = new Map(sorted);
+					for (const [key, value] of sortedJournalEntries.entries()) {
+						addJournalEntry(key, value);
+					}
+				})
+				.catch(console.log);
+			})
+			.catch(console.err);
+	}
+
+	function addJournalEntry(date, tags) {
+		const dateItem = document.createElement('li');
+		dateItem.textContent = date;
+		journalList.append(dateItem);
+
+		const tagList = document.createElement('ul');
+		for (const tag of tags) {
+			const tagItem = document.createElement('li');
+			tagItem.textContent = tag;
+			tagItem.classList.add('tag');
+			tagList.append(tagItem);
+		}
+		dateItem.append(tagList);
+	}
+
+	function deleteAllChildren(node) {
+		let child = node.lastElementChild;
+		while (child) {
+			node.removeChild(child);
+			child = node.lastElementChild;
+		}
 	}
 
 	function loadReport() {
@@ -122,6 +183,7 @@
             const endpoint = `logentry/${date}/${tag}`;
             const prom = requestWithSessionToken(endpoint, 'PUT');
             prom.then(newTagField.value = '').catch(alert);
+			loadJournal();
         };
         addJournalEntryButton.addEventListener('click', addJournalEntry);
         existingTagField.addEventListener('change', () => {

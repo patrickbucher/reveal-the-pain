@@ -39,7 +39,7 @@ app.post('/token', (req, res) => {
     const password = req.body.password;
     const result = bcrypt.compareSync(password, hashedCredentials.get(username));
     if (result) {
-        const expiry = 5 * 60;
+        const expiry = 30 * 60; // 30 minutes
         const token = jwt.sign({sub: username}, secretKey, {expiresIn: expiry});
         res.send({'access_token': token});
     } else {
