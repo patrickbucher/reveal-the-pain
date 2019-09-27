@@ -100,11 +100,21 @@
 		dateItem.textContent = date;
 		journalList.append(dateItem);
 
+        const deleteTag = (date, tag) => {
+            const resource = `logentry/${date}/${tag}`;
+            requestWithSessionToken(resource, 'DELETE')
+                .then(fetchJournal)
+                .catch(console.log);
+        };
+
 		const tagList = document.createElement('ul');
 		for (const tag of tags) {
 			const tagItem = document.createElement('li');
 			tagItem.textContent = tag;
 			tagItem.classList.add('tag');
+            tagItem.addEventListener('click', () => {
+                deleteTag(date, tag);
+            });
 			tagList.append(tagItem);
 		}
 		dateItem.append(tagList);
@@ -149,7 +159,6 @@
                 method == 'PUT' && response.status == 201) {
                 return response;
             }
-            console.log(response);
             if (response.status == 401) {
                 navigateTo('Login');
             }

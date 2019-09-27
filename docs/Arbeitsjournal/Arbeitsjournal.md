@@ -31,3 +31,4 @@
 | 26.09.2019 |     0.5 | Frontend      | Journaleinträge aufgrund neuer und bestehender Tags erstellen    |
 | 26.09.2019 |     0.5 | Backend       | Endpoint und Testskript für Journaleinträge-Tagesdaten erstellt  |
 | 27.09.2019 |     1.0 | Frontend      | Journal laden und darstellen                                     |
+| 27.09.2019 |     0.5 | Frontend      | Lösch-Funktion für bestehende Einträge implementiert             |
