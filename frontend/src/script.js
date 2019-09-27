@@ -12,6 +12,9 @@
 
 	const journalList = document.getElementById('journalList');
 
+    const ailmentTagField = document.getElementById('ailmentTagField');
+    const correlationList = document.getElementById('correlationList');
+
 	const navLogin = document.getElementById('navLogin');
 	const navLogout = document.getElementById('navLogout');
 	const navJournal = document.getElementById('navJournal');
@@ -24,6 +27,7 @@
 
     registerLoginEvents();
     registerJournalEvents();
+    registerReportEvents();
 	initializeNavigation();
 
 	let loggedIn = isLoggedIn();
@@ -36,11 +40,11 @@
 	}
 
 	function loadJournal() {
-		fetchTags();
+		fetchTags(existingTagField);
 		fetchJournal();
 	}
 
-	function fetchTags() {
+	function fetchTags(tagField) {
         const newTagOption = (tag) => {
             const tagOption = document.createElement('option');
             tagOption.setAttribute('value', tag);
@@ -51,13 +55,17 @@
 		prom.then(response => response.json())
 			.then(tags => {
 				tags.sort();
-				deleteAllChildren(existingTagField);
-                existingTagField.append(newTagOption(''));
+				deleteAllChildren(tagField);
+                tagField.append(newTagOption(''));
                 for (const tag of tags) {
-                    existingTagField.append(newTagOption(tag));
+                    tagField.append(newTagOption(tag));
                 }
             })
             .catch(console.log);
+	}
+
+	function loadReport() {
+        fetchTags(ailmentTagField);
 	}
 
 	function fetchJournal() {
@@ -128,10 +136,6 @@
 		}
 	}
 
-	function loadReport() {
-		console.log('TODO: load report'); // TODO
-	}
-
 	function requestWithSessionToken(userEndpoint, method) {
 		const username = sessionStorage.getItem('username');
 		if (username == null) {
@@ -200,6 +204,21 @@
         });
         newTagField.addEventListener('keypress', () => {
             existingTagField.value = '';
+        });
+    }
+
+    function registerReportEvents() {
+        ailmentTagField.addEventListener('change', () => {
+            const tag = ailmentTagField.value;
+            requestWithSessionToken(`correlation/${tag}`, 'GET')
+                .then(response => response.json())
+                .then(correlations => {
+                    for (const {tag, correlation} of correlations) {
+                        // TODO: display correlations properly
+                        console.log(tag, correlation);
+                    }
+                })
+                .catch(console.log);
         });
     }
 
