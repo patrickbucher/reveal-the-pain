@@ -56,3 +56,25 @@ ul#journalList ul {
 	font-weight: normal;
     cursor: crosshair;
 }
+
+#correlationList li {
+	list-style-type: none;
+}
+
+.correlation {
+    font-family: mono;
+    margin-right: 1em;
+    font-weight: bold;
+}
+
+.positive {
+    color: red;
+}
+
+.negative {
+    color: green;
+}
+
+.neutral {
+    color: grey;
+}

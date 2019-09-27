@@ -208,14 +208,37 @@
     }
 
     function registerReportEvents() {
+        const createCorrelationItem = (tag, corr) => {
+            const item = document.createElement('li');
+            const corrSpan = document.createElement('span');
+            const tagSpan = document.createElement('span');
+            tagSpan.textContent = tag;
+            tagSpan.classList.add('tag');
+            let corrStr = corr.toFixed(3);
+            if (corr == 0) {
+                corrStr = '±' + corrStr;
+                corrSpan.classList.add('neutral');
+            } else if (corr > 0) {
+                corrStr = '+' + corrStr;
+                corrSpan.classList.add('positive');
+            } else {
+                corrSpan.classList.add('negative');
+            }
+            corrSpan.textContent = corrStr;
+            corrSpan.classList.add('correlation');
+            item.append(corrSpan);
+            item.append(tagSpan);
+            return item;
+        };
         ailmentTagField.addEventListener('change', () => {
             const tag = ailmentTagField.value;
             requestWithSessionToken(`correlation/${tag}`, 'GET')
                 .then(response => response.json())
                 .then(correlations => {
+                    // TODO: sort correlations in desc order
+                    deleteAllChildren(correlationList);
                     for (const {tag, correlation} of correlations) {
-                        // TODO: display correlations properly
-                        console.log(tag, correlation);
+                        correlationList.append(createCorrelationItem(tag, correlation));
                     }
                 })
                 .catch(console.log);
