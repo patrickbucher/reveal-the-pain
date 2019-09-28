@@ -66,6 +66,7 @@
 
 	function loadReport() {
         fetchTags(ailmentTagField);
+        deleteAllChildren(correlationList);
 	}
 
 	function fetchJournal() {
@@ -235,7 +236,9 @@
             requestWithSessionToken(`correlation/${tag}`, 'GET')
                 .then(response => response.json())
                 .then(correlations => {
-                    // TODO: sort correlations in desc order
+                    correlations.sort((a, b) => {
+                        return b.correlation - a.correlation;
+                    });
                     deleteAllChildren(correlationList);
                     for (const {tag, correlation} of correlations) {
                         correlationList.append(createCorrelationItem(tag, correlation));
