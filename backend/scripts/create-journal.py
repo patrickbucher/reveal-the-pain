@@ -6,70 +6,89 @@ import sys
 
 journal = {
     '2019-09-01': [
-        'EnoughSleep',
+        'Coffee',
+        'Breakfast',
         'Walk',
+        'Work',
+        'Noise',
+        'Heat',
+        'Salad',
+        'Dinner',
+        'TV',
         'Beer',
         'Cigarettes',
-        'Coffee',
-        'Breakfast'
+        'Insomnia',
     ],
     '2019-09-02': [
-        'TooLittleSleep',
-        'Work',
-        'Stress',
         'Coffee',
-        'Cigarettes',
-        'Pasta',
-        'Apple',
-        'Headache'
+        'Breakfast',
+        'Walk',
+        'Work',
+        'Noise',
+        'Stress',
+        'Candy',
+        'Dinner',
+        'Beer',
+        'Cigarettes'
     ],
     '2019-09-03': [
-        'Breakfast',
+        'Coffee',
         'Stress',
+        'Walk',
         'Work',
-        'Programming',
-        'Apple',
-        'Cigarettes',
         'Noise',
-        'Headache'
+        'Stress',
+        'Dinner',
+        'Beer',
+        'Cigarettes',
+        'TV',
+        'Insomnia'
     ],
     '2019-09-04': [
-        'TooLittleSleep',
-        'Work',
+        'Holiday',
+        'Relaxed',
+        'Breakfast',
+        'Housework',
         'Walk',
-        'Coffee',
-        'Tiredness'
+        'Lunch',
+        'Dinner',
+        'TV',
+        'Insomnia'
     ],
     '2019-09-05': [
-        'EnoughSleep',
+        'Relaxed',
+        'Coffee',
+        'Breakfast',
         'Walk',
-        'Beer',
+        'Work',
         'Noise',
-        'Stress'
+        'Beer',
+        'Cigarettes'
     ],
     '2019-09-06': [
-        'EnoughSleep',
+        'Relaxed',
+        'Coffee',
+        'Breakfast',
         'Walk',
+        'Invitation',
+        'Beer',
         'Wine',
-        'Studying',
-        'Pasta',
-        'Cigarettes',
-        'Noise',
-        'Headache'
+        'Whiskey',
+        'Cigarettes'
     ],
     '2019-09-07': [
-        'EnoughSleep',
-        'Walk',
+        'Relaxed',
+        'Coffee',
+        'Breakfast',
         'Wine',
-        'Meat',
-        'Noise',
-        'Tiredness'
+        'TV',
+        'Insomnia'
     ]
 }
 
 base_endpoint = 'http://localhost:8000/'
-username = 'johndoe'
-password = 'topsecret1337'
+username = 'toni'
+password = 'Geheim1!'
 
 token_endpoint = base_endpoint + 'token'
 payload = json.dumps({'username': username, 'password': password})
@@ -99,6 +118,6 @@ res = requests.get(url, headers=auth_header)
 print(res.json())
 
 correlation_endpoint = base_endpoint + '{:s}/correlation/{:s}'
-url = correlation_endpoint.format(username, 'Headache')
+url = correlation_endpoint.format(username, 'Insomnia')
 res = requests.get(url, headers=auth_header)
 print(res.json())
