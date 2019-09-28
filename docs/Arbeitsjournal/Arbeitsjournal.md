@@ -36,3 +36,4 @@
 | 28.09.2019 |     0.5 | FE      | Korrelationen absteigend sortieren und bei jedem Aufruf leeren   |
 | 28.09.2019 |     3.0 | Dok     | Techische Dokumentation (Architektur, Libraries, Deployment)     |
 | 28.09.2019 |     1.0 | Dok     | Fazit und Reflexion                                              |
+| 28.09.2019 |     1.0 | BE      | Skript zur Generierung von Testdaten erweitert                   |

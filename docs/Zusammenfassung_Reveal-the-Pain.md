@@ -4,52 +4,52 @@ author: 'Patrick Bucher'
 subtitle: 'Web Programming Lab'
 ---
 
-# Projektidee
-
-Ein körperliches Leiden, z.B. Kopfschmerzen, kann viele Ursachen haben.
-Mithilfe von Self-Tracking einer Vielzahl möglicher Einflussgrössen können die
-Rohdaten zur Ursachenforschung erhoben werden. Mithilfe eines Phi-Koeffizienten
-kann anhand dieser Rohdaten die Korrelation zwischen Einflussgrössen und
-Krankheitssymptom berechnet werden. Damit können für ein Krankheitssymptom
-möglicherweise förderliche Einflüsse sondiert werden.
-
-Die «Reveal the Pain»-Web-Applikation hilft einerseits beim täglichen
-Self-Tracking und führt andererseits die Berechnung der
-Korrelationskoeffizienten automatisch durch. Um etwa den Ursachen für
-Kopfschmerzen auf den Grund zu gehen könnten folgende Einflussgrössen getrackt
-werden: Alkoholkonsum, Bewegung, Stress, Wetterumschwung, Koffein, Rauchen,
-Lärm, usw.
-
-Die Idee für diese Anwendung stammt aus dem Buch «Eloquent JavaScript», wo die
-Phi-Korrelation zwischen Pizzakonsum und der nächtlichen Verwandlung in ein
-Eichhörnchen untersucht wird (Haverbeke, Kapitel 4, Seite 66: _The
-Lycanothrope's Log_).
-
 # Technische Dokumentation
 
 Die Applikation besteht aus drei Teilen: Ein Frontend, das als Single Page
 Application umgesetzt ist; ein Backend, das eine RESTful API anbietet; und den 
 Key-Value-Store [Redis](https://redis.io/) für die Datenhaltung.
 
+Das Backend wurde einerseits mit Unit Tests (Berechnung der Korrelation,
+Validierungsfunktionen), andererseits mit einem Python-Skript
+(`backend/scripts/create-journal.py`) End-to-End getestet. Das Frontend wurde
+manuell getestet.
+
+## Frontend
+
 Das Frontend wurde mit reinem JavaScript (_«Vanilla JS»_) entwickelt. Es wurden
 weder externen Dependencies verwendet, noch gibt es einen Build-Prozess. Die
 ursprüngliche Idee, Web Components zu verwenden, wurde aus zeilichen Gründen
 aufgegeben. Das Design-Ziel im Frontend war Einfachheit.
 
+## Backend
+
 Im Backend hingegen sind verschiedene Libraries verwendet worden: `express` und
 `cors` für die RESTful API, `jsonwebtoken` für das Ausstellen und Validieren
 der Tokens ‒ d.h. zum Schützen der API, `bcryptjs` zum Verschlüsseln von
 Passwörtern, `redis` zum Ansprechen des Key-Value-Stores und `jest` für Unit
-Tests.
+Tests. Folgende Endpoints werden zur Verfügung gestellt:
+
+- `GET /canary`: prüfen, ob der Server läuft (unautorisiert)
+- `POST /token`: Token mit Benutzername/Passwort ausstellen
+- `PUT /[user]/logentry/[date]/[tag]`: Tag für Tagesdatum erfassen
+- `DELETE /[user]/logentry/[date]/[tag]`: Tag für Tagesdatum entfernen
+- `GET /[user]/tags`: alle Tags eines Benutzers
+- `GET /[user]/dates`: Tagesdaten, zu denen der Benutzer Einträge hat
+- `GET /[user]/[date]/tags`: Journaleintrag eines Benutzers (Datum und Tags)
+- `GET /[user]/correlation/[tag]`: Korrelationen zu einem Tag berechnen
 
 Im Key-Value-Store (Redis) werden die Daten als
 [Sets](https://redis.io/commands/set) abgelegt. Der Key hat die Form
 `username:date`, und der Wert ist ein Set von Tags, also z.B.
 `johndoe:2019-09-28 = [Beer, Walk, Coffee, Work, Stress, Insomnia]`.
 
-Das Backend wurde einerseits mit Unit Tests (Berechnung der Korrelation,
-Validierungsfunktionen), andererseits mit einem Python-Skript (End-to-End-Tests
-der API) getestet. Das Frontend wurde ausschliesslich manuell getestet.
+## Deployment
+
+Die Applikation kann mittels `docker-compose` gestartet werden und ist unter
+der URL [http://localhost:8080/](http://localhost:8080/) verfügbar. Sie greift
+auf das Backend (Port `8000`) zu, welches wiederum auf Redis zugreift (Port
+`6379`).
 
 Um die Applikation produktiv betreiben zu können, müsste die statische Datei
 (`credentials.js`) mit Klartext-Credentials durch ein Registrierungssystem
@@ -57,16 +57,12 @@ ersetzt werden.  (Innerhalb des Backends werden bereits die verschlüsselten
 `bcrypt`-Tokens geprüft.) Der `secretKey` müsste als Umgebungsvariable
 injiziert werden.
 
-Die Applikation kann mittels `docker-compose` gestartet werden und ist unter
-der URL [http://localhost:8080/](http://localhost:8080/) verfügbar. Sie greift
-auf das Backend (Port `8000`) zu, welches wiederum auf Redis zugreift (Port
-`6379`).
-
 ## Berechnung der Korrelation
 
-Der Benutzer hat während einer Woche seine Verhaltensweisen getrackt, um auf
-die Ursache für sein Rückenleiden zu kommen. Das Journal könnte folgendermassen
-aussehen (die Zielvariable _Rückenschmerzen_ wird wie jeder andere Tag erfasst):
+Angenommen, der Benutzer hat während einer Woche seine Verhaltensweisen
+getrackt, um auf die Ursache für sein Rückenleiden zu kommen. Das Journal
+könnte folgendermassen aussehen (die Zielvariable _Rückenschmerzen_ wird wie
+jeder andere Tag erfasst):
 
 - Montag: Ausschlafen, Gewichtheben, Büroarbeit, Gartenarbeit, Rückenschmerzen.
 - Dienstag: Büroarbeit, Alkoholkonsum, Einkaufen, Rückenschmerzen.
@@ -108,8 +104,7 @@ $$ \underline{\underline{\phi}} = \frac{3 \times 1 - 2 \times 1}{\sqrt{(2+3)(1+1
 Die Skala reicht von -1 (negative Korrelation) bis +1 (positive Korrelation).
 Für Werte mit einem Betrag ab 0.5 kann von einer Korrelation die Rede sein.
 Die erfassten Daten ergeben somit keine Korrelation zwischen Büroarbeit und
-Rückenschmerzen. Der Benutzer muss weiter Daten erfassen, um seinem
-Rückenleiden auf die Spur zu kommen.
+Rückenschmerzen; dazu müssten wohl weitere Daten erfasst werden.
 
 # Fazit
 
@@ -161,6 +156,9 @@ Rückenleiden auf die Spur zu kommen.
 - Für den Umfang der Applikation ist ein Frontend mit Vanilla JS praktikabel.
   Bei grösseren Frontends gibt es mehr Statusübergänge, was ohne
   MVC-Architektur schnell unübersichtlich werden könnte.
+- Der hohe Aufwand für die Dokumentation (höher als für das Frontend, siehe
+  Auswertung im Arbeitsjournal) hat mich überrascht, zumal die Dokumentation
+  mit maximal fünf Seiten recht schlank ausfallen musste.
 
 # Arbeitsjournal
 
@@ -202,14 +200,11 @@ Rückenleiden auf die Spur zu kommen.
 | 28.09.2019 |      0.5 | FE        | Korrelationen absteigend sortieren und bei jedem Aufruf leeren   |
 | 28.09.2019 |      3.0 | Dok       | Techische Dokumentation (Architektur, Libraries, Deployment)     |
 | 28.09.2019 |      1.0 | Dok       | Fazit und Reflexion                                              |
-|            | **31.0** | **Total** |                                                                  |
+| 28.09.2019 |      1.0 | BE        | Skript zur Generierung von Testdaten erweitert                   |
+|            | **32.0** | **Total** |                                                                  |
 
 (Legende: BE=Backend, FE=Frontend, Dok=Dokumentation, Dep=Deployment)
 
-Total wurden 31 Stunden Arbeitsaufwand geleistet, verteilt auf Backend (13.5
+Total wurden 32 Stunden Arbeitsaufwand geleistet, verteilt auf Backend (14.5
 Stunden), Frontend (7 Stunden), Dokumentation (7.5 Stunden) und Deployment
 (3.0).
-
-# Quellen
-
-Marjin Haverbeke: _Eloquent JavaScript. A Modern Introduction to Programming. (Third Edition)_
