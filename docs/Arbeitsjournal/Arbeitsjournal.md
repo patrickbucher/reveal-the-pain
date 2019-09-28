@@ -20,13 +20,13 @@
 | 20.09.2019 |     1.0 | BE      | Authentifizierung/Autorisierung mit bcrypt und JWT implementiert |
 | 20.09.2019 |     0.5 | BE      | Testdaten-Skripts um AuthN/AuthZ erweitert                       |
 | 22.09.2019 |     1.0 | Dok     | Berechnung des Phi-Koeffizienten dokumentiert                    |
-| 23.09.2019 |     1.0 | Dep     | FE-Deployment erstellt; Abhängigkeiten definiert                 |
-| 23.09.2019 |     1.0 | Dep     | BE erst nach Redis aufstarten; Verbindung umkonfiguriert         |
+| 23.09.2019 |     1.0 | Dep     | Frontend-Deployment erstellt; Abhängigkeiten definiert           |
+| 23.09.2019 |     1.0 | Dep     | Backend erst nach Redis aufstarten; Verbindung umkonfiguriert    |
 | 24.09.2019 |     1.0 | FE      | User-Interface aufgebaut; Login-Formular erstellt; Login-Request |
-| 24.09.2019 |     0.5 | BE      | CORS konfiguriert für lokales Dep                                |
+| 24.09.2019 |     0.5 | BE      | CORS konfiguriert für lokales Deployment                         |
 | 25.09.2019 |     1.0 | FE      | Login/Logout und Navigation (Single Pager) umgesetzt             |
 | 26.09.2019 |     0.5 | FE      | Navigation und Session-Handling verbessert                       |
-| 26.09.2019 |     0.5 | FE      | Generische Funktion für BE-Requests erstellt                     |
+| 26.09.2019 |     0.5 | FE      | Generische Funktion für Backend-Requests erstellt                |
 | 26.09.2019 |     0.5 | FE      | Formular zum Erfassen von Journaleinträgen erstellt              |
 | 26.09.2019 |     0.5 | FE      | Journaleinträge aufgrund neuer und bestehender Tags erstellen    |
 | 26.09.2019 |     0.5 | BE      | Endpoint und Testskript für Journaleinträge-Tagesdaten erstellt  |
@@ -34,4 +34,5 @@
 | 27.09.2019 |     0.5 | FE      | Lösch-Funktion für bestehende Einträge implementiert             |
 | 27.09.2019 |     1.0 | FE      | Report-Seite erstellt; Laden und Darstellen der Korrelationen    |
 | 28.09.2019 |     0.5 | FE      | Korrelationen absteigend sortieren und bei jedem Aufruf leeren   |
-| 28.09.2019 |     4.0 | Dok     | Techische Dokumentation (Architektur, Libraries, Dep)            |
+| 28.09.2019 |     3.0 | Dok     | Techische Dokumentation (Architektur, Libraries, Deployment)     |
+| 28.09.2019 |     1.0 | Dok     | Fazit und Reflexion                                              |

@@ -32,14 +32,14 @@ Application umgesetzt ist; ein Backend, das eine RESTful API anbietet; und den
 Key-Value-Store [Redis](https://redis.io/) für die Datenhaltung.
 
 Das Frontend wurde mit reinem JavaScript (_«Vanilla JS»_) entwickelt. Es wurden
-keine externen Dependencies verwendet, noch gibt es einen Build-Prozess. Die
+weder externen Dependencies verwendet, noch gibt es einen Build-Prozess. Die
 ursprüngliche Idee, Web Components zu verwenden, wurde aus zeilichen Gründen
 aufgegeben. Das Design-Ziel im Frontend war Einfachheit.
 
 Im Backend hingegen sind verschiedene Libraries verwendet worden: `express` und
 `cors` für die RESTful API, `jsonwebtoken` für das Ausstellen und Validieren
 der Tokens ‒ d.h. zum Schützen der API, `bcryptjs` zum Verschlüsseln von
-Passwörtern, `redis` zum Ansprechen des Key-Value-Stores, und `jest` für Unit
+Passwörtern, `redis` zum Ansprechen des Key-Value-Stores und `jest` für Unit
 Tests.
 
 Im Key-Value-Store (Redis) werden die Daten als
@@ -48,18 +48,19 @@ Im Key-Value-Store (Redis) werden die Daten als
 `johndoe:2019-09-28 = [Beer, Walk, Coffee, Work, Stress, Insomnia]`.
 
 Das Backend wurde einerseits mit Unit Tests (Berechnung der Korrelation,
-Validierungen), andererseits mit einem Python-Skript (End-to-End-Tests der API)
-getestet. Das Frontend wurde ausschliesslich manuell getestet.
+Validierungsfunktionen), andererseits mit einem Python-Skript (End-to-End-Tests
+der API) getestet. Das Frontend wurde ausschliesslich manuell getestet.
 
 Um die Applikation produktiv betreiben zu können, müsste die statische Datei
-mit Klartext-Credentials durch ein Registrierungssystem ersetzt werden.
-(Innerhalb des Backends werden bereits die verschlüsselten `bcrypt`-Tokens
-geprüft.)
+(`credentials.js`) mit Klartext-Credentials durch ein Registrierungssystem
+ersetzt werden.  (Innerhalb des Backends werden bereits die verschlüsselten
+`bcrypt`-Tokens geprüft.) Der `secretKey` müsste als Umgebungsvariable
+injiziert werden.
 
-Die Applikation kann mittels `docker-compose` gestartet werden. Die Applikation
-ist unter der URL [http://localhost:8080/](http://localhost:8080/) verfügbar,
-und greift auf das Backend (Port `8000`) zu, welches wiederum auf Redis zugreift
-(Port `6379`).
+Die Applikation kann mittels `docker-compose` gestartet werden und ist unter
+der URL [http://localhost:8080/](http://localhost:8080/) verfügbar. Sie greift
+auf das Backend (Port `8000`) zu, welches wiederum auf Redis zugreift (Port
+`6379`).
 
 ## Berechnung der Korrelation
 
@@ -113,8 +114,12 @@ Rückenleiden auf die Spur zu kommen.
 # Fazit
 
 - Die erstellte Applikation ist für die lokale Anwendung durchaus praktisch
-  einsetzbar.
-- Ob die Applikation auch für mehrere Benutzer 
+  einsetzbar. Ich werde sie versuchshalber einsetzen, um möglichen Ursachen für
+  meine Kopfschmerzen auf die Spur zu kommen.
+- Ob die Applikation auch für mehrere Benutzer auf einem Server praktikabel
+  verwendbar ist (Lasttest), konnte nicht getestet werden. Im Frontend wird es
+  sich zeigen, ob das komplette Neuladen des Journals beim Erfassen eines Tags
+  auch bei grösseren Journalen genug performant ist.
 - Das User-Interface wurde bewusst minimalistisch gehalten. Auf Fragestellungen
   wie Accessibility und Responsiveness konnte aus zeitlichen gründen nicht
   eingegangen werden.
@@ -125,9 +130,6 @@ Rückenleiden auf die Spur zu kommen.
 - Zur praktischen Anwendung auf einem Server müsste die Möglichkeit einer
   Registrierung eingebaut werden. Die Credentials könnten in Redis gespeichert
   werden.
-- Die Blockwoche und v.a. die Projektarbeit haben nicht nur mein Interesse an
-  der Web-Entwicklung wieder geweckt, sondern auch an der funktionalen und
-  asynchronen Programmierung.
 - Ein Studienkollege merkte an, dass sich der Report auch gut mit einem
   Diagramm visualisieren liesse. Da dies den Projektumfang sprengen würde,
   möchte ich diese Erweiterung im Rahmen des Moduls _Datenvisualisierung_, das
@@ -135,21 +137,25 @@ Rückenleiden auf die Spur zu kommen.
 
 # Reflexion
 
+- Die Blockwoche und v.a. die Projektarbeit haben nicht nur mein Interesse an
+  der Web-Entwicklung wieder geweckt, sondern auch an der funktionalen und
+  asynchronen Programmierung. Ich möchte mich weiter mit diesen Themen
+  befassen.
 - Ursprünglich wollte ich das Backend mit der Programmiersprache Go umsetzen,
-  weil ich damit schon verschiedene kleine HTTP-Server-Anwendungen entwickelt
-  habe. Nach der Einführung in Node.js und Express.js habe ich mich aber dazu
+  weil ich damit schon verschiedene HTTP-Server-Anwendungen entwickelt habe.
+  Nach der Einführung in Node.js und Express habe ich mich aber dazu
   entschlossen, diese Technologien einzusetzen, um dabei etwas Neues zu lernen.
-- JavaScript und Express.js erlauben es die Endpoints sehr einfach und mit
-  wenig Code zu definieren und zu implementieren. Gewöhnungsbedürftig war
-  hingegen, dass viele Libraries (z.B. die Redis-Library zum Zugriff auf den
+- JavaScript und Express erlauben es die Endpoints sehr einfach und mit wenig
+  Code zu definieren und zu implementieren. Gewöhnungsbedürftig war hingegen,
+  dass viele Libraries (z.B. die Redis-Library zum Zugriff auf den
   Key-Value-Store) asynchron arbeiten, was jedoch nötig ist, um den globalen
   Event-Loop von Node.js nicht mit unnötig grossen Aufgaben zu blockieren. Hat
   man sich aber erst einmal an den Promise-Mechanismus gewöhnt, kann man damit
   schnell übersichtlichen und hochwertigen Code schreiben.
 - Beim Frontend musste ich aus zeitlichen Gründen von der Idee, Web Components
   zu verwenden, abrücken. Ich habe mich dazu entschieden, das Frontend mit
-  HTML, CSS und Vanilla JS zu entwickeln, d.h. ohne externe
-  Dependencies und ohne Build-Prozess.
+  HTML, CSS und Vanilla JS zu entwickeln, d.h. ohne externe Dependencies und
+  ohne Build-Prozess.
 - Beim Backend habe ich andere Design-Ziele verfolgt: Ich habe Libraries
   verwendet, um mir die Entwicklung möglichst zu erleichtern.
 - Für den Umfang der Applikation ist ein Frontend mit Vanilla JS praktikabel.
@@ -158,44 +164,45 @@ Rückenleiden auf die Spur zu kommen.
 
 # Arbeitsjournal
 
-| Datum      | Stunden | Bereich | Tätigkeit                                                        |
-|------------|--------:|---------|------------------------------------------------------------------|
-| 01.09.2019 |     1.0 | Dok     | Projektidee ausgearbeitet                                        |
-| 01.09.2019 |     1.0 | BE      | Einarbeiten in Redis Sets                                        |
-| 01.09.2019 |     1.0 | Dep     | initiale Konfiguration für Docker Compose erstellt               |
-| 04.09.2019 |     1.0 | Dok     | Projektbeschreibung erstellt                                     |
-| 05.09.2019 |     1.0 | BE      | Backend mit Node.js, Express, Redis-Client und Docker aufgesetzt |
-| 05.09.2019 |     0.5 | Dok     | Dokument für Zusammenfassung aufgesetzt (Makefile für Pandoc)    |
-| 12.09.2019 |     0.5 | BE      | API-Design erarbeitet                                            |
-| 13.09.2019 |     1.0 | BE      | Durchstich imt Express.js und Redis: Log-Eintrag erfassen        |
-| 13.09.2019 |     1.0 | BE      | Validierungsfunktionen mit Testfällen entwickelt                 |
-| 15.09.2019 |     0.5 | BE      | Löschfunktion für Log-Einträge umgesetzt                         |
-| 15.09.2019 |     1.0 | BE      | Tags aller Log-Einträge eines Benutzers und pro Datum ermitteln  |
-| 15.09.2019 |     1.5 | BE      | Map von Datum auf Tagliste erstellen                             |
-| 15.09.2019 |     0.5 | BE      | Testfall für Kategorisierung der Tag-Korrelation schrieben       |
-| 17.09.2019 |     1.0 | BE      | Kategorisierung und Phi-Funktion für Tag-Korrelation umgesetzt   |
-| 18.09.2019 |     0.5 | BE      | Korrekturen an Kategorisierung und Tag-Korrelation vorgenommen   |
-| 19.09.2019 |     1.0 | BE      | Tag-Korrelation und dazugehörigen Endpoint umgesetzt             |
-| 19.09.2019 |     0.5 | BE      | Python-Skript zur Erstellung von Testdaten über HTTP erstellt    |
-| 20.09.2019 |     1.0 | BE      | Authentifizierung/Autorisierung mit bcrypt und JWT implementiert |
-| 20.09.2019 |     0.5 | BE      | Testdaten-Skripts um AuthN/AuthZ erweitert                       |
-| 22.09.2019 |     1.0 | Dok     | Berechnung des Phi-Koeffizienten dokumentiert                    |
-| 23.09.2019 |     1.0 | Dep     | FE-Deployment erstellt; Abhängigkeiten definiert                 |
-| 23.09.2019 |     1.0 | Dep     | BE erst nach Redis aufstarten; Verbindung umkonfiguriert         |
-| 24.09.2019 |     1.0 | FE      | User-Interface aufgebaut; Login-Formular erstellt; Login-Request |
-| 24.09.2019 |     0.5 | BE      | CORS konfiguriert für lokales Dep                                |
-| 25.09.2019 |     1.0 | FE      | Login/Logout und Navigation (Single Pager) umgesetzt             |
-| 26.09.2019 |     0.5 | FE      | Navigation und Session-Handling verbessert                       |
-| 26.09.2019 |     0.5 | FE      | Generische Funktion für BE-Requests erstellt                     |
-| 26.09.2019 |     0.5 | FE      | Formular zum Erfassen von Journaleinträgen erstellt              |
-| 26.09.2019 |     0.5 | FE      | Journaleinträge aufgrund neuer und bestehender Tags erstellen    |
-| 26.09.2019 |     0.5 | BE      | Endpoint und Testskript für Journaleinträge-Tagesdaten erstellt  |
-| 27.09.2019 |     1.0 | FE      | Journal laden und darstellen                                     |
-| 27.09.2019 |     0.5 | FE      | Lösch-Funktion für bestehende Einträge implementiert             |
-| 27.09.2019 |     1.0 | FE      | Report-Seite erstellt; Laden und Darstellen der Korrelationen    |
-| 28.09.2019 |     0.5 | FE      | Korrelationen absteigend sortieren und bei jedem Aufruf leeren   |
-| 28.09.2019 |     4.0 | Dok     | Techische Dokumentation (Architektur, Libraries, Dep)            |
-|            |    31.0 | Total   |                                                                  |
+| Datum      |  Stunden | Bereich   | Tätigkeit                                                        |
+|------------|---------:|-----------|------------------------------------------------------------------|
+| 01.09.2019 |      1.0 | Dok       | Projektidee ausgearbeitet                                        |
+| 01.09.2019 |      1.0 | BE        | Einarbeiten in Redis Sets                                        |
+| 01.09.2019 |      1.0 | Dep       | initiale Konfiguration für Docker Compose erstellt               |
+| 04.09.2019 |      1.0 | Dok       | Projektbeschreibung erstellt                                     |
+| 05.09.2019 |      1.0 | BE        | Backend mit Node.js, Express, Redis-Client und Docker aufgesetzt |
+| 05.09.2019 |      0.5 | Dok       | Dokument für Zusammenfassung aufgesetzt (Makefile für Pandoc)    |
+| 12.09.2019 |      0.5 | BE        | API-Design erarbeitet                                            |
+| 13.09.2019 |      1.0 | BE        | Durchstich imt Express.js und Redis: Log-Eintrag erfassen        |
+| 13.09.2019 |      1.0 | BE        | Validierungsfunktionen mit Testfällen entwickelt                 |
+| 15.09.2019 |      0.5 | BE        | Löschfunktion für Log-Einträge umgesetzt                         |
+| 15.09.2019 |      1.0 | BE        | Tags aller Log-Einträge eines Benutzers und pro Datum ermitteln  |
+| 15.09.2019 |      1.5 | BE        | Map von Datum auf Tagliste erstellen                             |
+| 15.09.2019 |      0.5 | BE        | Testfall für Kategorisierung der Tag-Korrelation schrieben       |
+| 17.09.2019 |      1.0 | BE        | Kategorisierung und Phi-Funktion für Tag-Korrelation umgesetzt   |
+| 18.09.2019 |      0.5 | BE        | Korrekturen an Kategorisierung und Tag-Korrelation vorgenommen   |
+| 19.09.2019 |      1.0 | BE        | Tag-Korrelation und dazugehörigen Endpoint umgesetzt             |
+| 19.09.2019 |      0.5 | BE        | Python-Skript zur Erstellung von Testdaten über HTTP erstellt    |
+| 20.09.2019 |      1.0 | BE        | Authentifizierung/Autorisierung mit bcrypt und JWT implementiert |
+| 20.09.2019 |      0.5 | BE        | Testdaten-Skripts um AuthN/AuthZ erweitert                       |
+| 22.09.2019 |      1.0 | Dok       | Berechnung des Phi-Koeffizienten dokumentiert                    |
+| 23.09.2019 |      1.0 | Dep       | Frontend-Deployment erstellt; Abhängigkeiten definiert           |
+| 23.09.2019 |      1.0 | Dep       | Backend erst nach Redis aufstarten; Verbindung umkonfiguriert    |
+| 24.09.2019 |      1.0 | FE        | User-Interface aufgebaut; Login-Formular erstellt; Login-Request |
+| 24.09.2019 |      0.5 | BE        | CORS konfiguriert für lokales Deployment                         |
+| 25.09.2019 |      1.0 | FE        | Login/Logout und Navigation (Single Pager) umgesetzt             |
+| 26.09.2019 |      0.5 | FE        | Navigation und Session-Handling verbessert                       |
+| 26.09.2019 |      0.5 | FE        | Generische Funktion für Backend-Requests erstellt                |
+| 26.09.2019 |      0.5 | FE        | Formular zum Erfassen von Journaleinträgen erstellt              |
+| 26.09.2019 |      0.5 | FE        | Journaleinträge aufgrund neuer und bestehender Tags erstellen    |
+| 26.09.2019 |      0.5 | BE        | Endpoint und Testskript für Journaleinträge-Tagesdaten erstellt  |
+| 27.09.2019 |      1.0 | FE        | Journal laden und darstellen                                     |
+| 27.09.2019 |      0.5 | FE        | Lösch-Funktion für bestehende Einträge implementiert             |
+| 27.09.2019 |      1.0 | FE        | Report-Seite erstellt; Laden und Darstellen der Korrelationen    |
+| 28.09.2019 |      0.5 | FE        | Korrelationen absteigend sortieren und bei jedem Aufruf leeren   |
+| 28.09.2019 |      3.0 | Dok       | Techische Dokumentation (Architektur, Libraries, Deployment)     |
+| 28.09.2019 |      1.0 | Dok       | Fazit und Reflexion                                              |
+|            | **31.0** | **Total** |                                                                  |
 
 (Legende: BE=Backend, FE=Frontend, Dok=Dokumentation, Dep=Deployment)
 
