@@ -11,7 +11,6 @@ class RedisStorage {
         });
         this.client.on('ready', () => {
             console.log(`connected to ${address}`);
-            // TODO: do this in a for loop
             this.get = promisify(this.client.get).bind(this.client);
             this.sadd = promisify(this.client.sadd).bind(this.client);
             this.srem = promisify(this.client.srem).bind(this.client);

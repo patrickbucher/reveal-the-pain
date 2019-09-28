@@ -189,7 +189,6 @@
     }
 
     function registerJournalEvents() {
-        // TODO: test with other locales if date format stays the same
         const addJournalEntry = () => {
             const date = dateField.value;
             const tag = newTagField.value.trim() != '' ?
