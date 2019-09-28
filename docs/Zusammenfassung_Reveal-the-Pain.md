@@ -159,6 +159,8 @@ Rückenschmerzen; dazu müssten wohl weitere Daten erfasst werden.
 - Der hohe Aufwand für die Dokumentation (höher als für das Frontend, siehe
   Auswertung im Arbeitsjournal) hat mich überrascht, zumal die Dokumentation
   mit maximal fünf Seiten recht schlank ausfallen musste.
+- Das Ergebnis umfasst 751 Zeilen JavaScript (Frontend: 313, Backend: 438), 115
+  Zeilen Python (Testskript), 85 Zeilen HTML und 67 Zeilen CSS.
 
 # Arbeitsjournal
 
