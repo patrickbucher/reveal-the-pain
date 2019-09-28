@@ -8,7 +8,7 @@ Projektidee_Reveal-the-Pain.pdf: Projektidee_Reveal-the-Pain.md
 	pandoc $(PDF_PARAMS) $(FONT_PARAMS) $(DATE) $^ -o $@
 
 Zusammenfassung_Reveal-the-Pain.pdf: Zusammenfassung_Reveal-the-Pain.md
-	pandoc $(PDF_PARAMS) $(FONT_PARAMS) $(DATE) $^ -o $@
+	pandoc -N $(PDF_PARAMS) $(FONT_PARAMS) $(DATE) $^ -o $@
 
 clean:
 	rm -f Projektidee_Reveal-the-Pain.pdf Zusammenfassung_Reveal-the-Pain.pdf
