@@ -7,11 +7,11 @@
 | 05.09.2019 |     1.0 | BE      | Backend mit Node.js, Express, Redis-Client und Docker aufgesetzt |
 | 05.09.2019 |     0.5 | Dok     | Dokument für Zusammenfassung aufgesetzt (Makefile für Pandoc)    |
 | 12.09.2019 |     0.5 | BE      | API-Design erarbeitet                                            |
-| 13.09.2019 |     1.0 | BE      | Durchstich imt Express.js und Redis: Log-Eintrag erfassen        |
+| 13.09.2019 |     1.0 | BE      | Durchstich mit Express.js und Redis: Log-Eintrag erfassen        |
 | 13.09.2019 |     1.0 | BE      | Validierungsfunktionen mit Testfällen entwickelt                 |
 | 15.09.2019 |     0.5 | BE      | Löschfunktion für Log-Einträge umgesetzt                         |
 | 15.09.2019 |     1.0 | BE      | Tags aller Log-Einträge eines Benutzers und pro Datum ermitteln  |
-| 15.09.2019 |     1.5 | BE      | Map von Datum auf Tagliste erstellen                             |
+| 15.09.2019 |     1.5 | BE      | Map von Datum auf Tagliste erstellt                              |
 | 15.09.2019 |     0.5 | BE      | Testfall für Kategorisierung der Tag-Korrelation schrieben       |
 | 17.09.2019 |     1.0 | BE      | Kategorisierung und Phi-Funktion für Tag-Korrelation umgesetzt   |
 | 18.09.2019 |     0.5 | BE      | Korrekturen an Kategorisierung und Tag-Korrelation vorgenommen   |
@@ -28,7 +28,7 @@
 | 26.09.2019 |     0.5 | FE      | Navigation und Session-Handling verbessert                       |
 | 26.09.2019 |     0.5 | FE      | Generische Funktion für Backend-Requests erstellt                |
 | 26.09.2019 |     0.5 | FE      | Formular zum Erfassen von Journaleinträgen erstellt              |
-| 26.09.2019 |     0.5 | FE      | Journaleinträge aufgrund neuer und bestehender Tags erstellen    |
+| 26.09.2019 |     0.5 | FE      | Journaleinträge aufgrund neuer und bestehender Tags erstellt     |
 | 26.09.2019 |     0.5 | BE      | Endpoint und Testskript für Journaleinträge-Tagesdaten erstellt  |
 | 27.09.2019 |     1.0 | FE      | Journal laden und darstellen                                     |
 | 27.09.2019 |     0.5 | FE      | Lösch-Funktion für bestehende Einträge implementiert             |

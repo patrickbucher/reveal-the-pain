@@ -6,9 +6,9 @@ subtitle: 'Web Programming Lab'
 
 # Technische Dokumentation
 
-Die Applikation besteht aus drei Teilen: Ein Frontend, das als Single Page
-Application umgesetzt ist; ein Backend, das eine RESTful API anbietet; und den 
-Key-Value-Store [Redis](https://redis.io/) für die Datenhaltung.
+Die Applikation besteht aus drei Teilen: Einem Frontend, das als Single Page
+Application umgesetzt ist; einem Backend, das eine RESTful API anbietet; und
+einem Key-Value-Store ([Redis](https://redis.io/)) für die Datenhaltung.
 
 Das Backend wurde einerseits mit Unit Tests (Berechnung der Korrelation,
 Validierungsfunktionen), andererseits mit einem Python-Skript
@@ -31,7 +31,7 @@ Passwörtern, `redis` zum Ansprechen des Key-Value-Stores und `jest` für Unit
 Tests. Folgende Endpoints werden zur Verfügung gestellt:
 
 - `GET /canary`: prüfen, ob der Server läuft (unautorisiert)
-- `POST /token`: Token mit Benutzername/Passwort ausstellen
+- `POST /token`: Token mit Benutzername/Passwort ausstellen (Login)
 - `PUT /[user]/logentry/[date]/[tag]`: Tag für Tagesdatum erfassen
 - `DELETE /[user]/logentry/[date]/[tag]`: Tag für Tagesdatum entfernen
 - `GET /[user]/tags`: alle Tags eines Benutzers
@@ -47,15 +47,15 @@ Im Key-Value-Store (Redis) werden die Daten als
 ## Deployment
 
 Die Applikation kann mittels `docker-compose` gestartet werden und ist unter
-der URL [http://localhost:8080/](http://localhost:8080/) verfügbar. Sie greift
-auf das Backend (Port `8000`) zu, welches wiederum auf Redis zugreift (Port
-`6379`).
+der URL [`http://localhost:8080/`](http://localhost:8080/) verfügbar. Sie
+greift auf das Backend (Port `8000`) zu, welches wiederum auf Redis zugreift
+(Port `6379`).
 
 Um die Applikation produktiv betreiben zu können, müsste die statische Datei
-(`credentials.js`) mit Klartext-Credentials durch ein Registrierungssystem
-ersetzt werden.  (Innerhalb des Backends werden bereits die verschlüsselten
-`bcrypt`-Tokens geprüft.) Der `secretKey` müsste als Umgebungsvariable
-injiziert werden.
+mit Klartext-Credentials (`credentials.js`) durch ein Registrierungssystem
+ersetzt werden. Innerhalb des Backends werden bereits die verschlüsselten
+`bcrypt`-Tokens geprüft. Der `secretKey` müsste als Umgebungsvariable injiziert
+werden.
 
 ## Berechnung der Korrelation
 
@@ -64,23 +64,23 @@ getrackt, um auf die Ursache für sein Rückenleiden zu kommen. Das Journal
 könnte folgendermassen aussehen (die Zielvariable _Rückenschmerzen_ wird wie
 jeder andere Tag erfasst):
 
-- Montag: Ausschlafen, Gewichtheben, Büroarbeit, Gartenarbeit, Rückenschmerzen.
-- Dienstag: Büroarbeit, Alkoholkonsum, Einkaufen, Rückenschmerzen.
-- Mittwoch: Büroarbeit, Müdigkeit, Einkaufen, Rückenschmerzen.
-- Donnerstag: Ausschlafen, Gartenarbeit, Alkoholkonsum, Rückenschmerzen.
-- Freitag: Büroarbeit, Müdigkeit, Einkaufen.
-- Samstag: Ausschlafen, Spaziergang, Putzen, Gartenarbeit, Rückenschmerzen.
-- Sonntag: Ausschlafen, Alkoholkonsum, Spaziergang, Velotour.
+- Montag: Ausschlafen, Gewichtheben, Büroarbeit, Gartenarbeit, Rückenschmerzen
+- Dienstag: Büroarbeit, Alkoholkonsum, Einkaufen, Rückenschmerzen
+- Mittwoch: Büroarbeit, Müdigkeit, Einkaufen, Rückenschmerzen
+- Donnerstag: Ausschlafen, Gartenarbeit, Alkoholkonsum, Rückenschmerzen
+- Freitag: Büroarbeit, Müdigkeit, Einkaufen
+- Samstag: Ausschlafen, Spaziergang, Putzen, Gartenarbeit, Rückenschmerzen
+- Sonntag: Ausschlafen, Alkoholkonsum, Spaziergang, Velotour
 
 Nun möchte der Benutzer die Korrelationen verschiedener möglicher
 Einflussgrössen für die Zielvariable _Rückenschmerzen_ berechnen lassen. Für
-jeden Tag (jede erklärende Variable im Journal, ausgenommen die Zielvariable
+jeden Tag (jede erklärende Variable im Journal, ausgenommen der Zielvariablen
 _Rückenschmerzen_), wird für jedes Datum folgende Klassifizierung vorgenommen:
 
-- Gruppe 1: Weder Ziel- noch erklärende Variable eingetragen.
-- Gruppe 2: Zielvariable fehlt, erklärende Variable vorhanden.
-- Gruppe 3: Zielvariable eingetragen, erklärende Variable fehlt.
-- Gruppe 4: Ziel- und erklärende Variable eingetragen.
+- Gruppe 1: Weder Ziel- noch erklärende Variable eingetragen
+- Gruppe 2: Zielvariable fehlt, erklärende Variable vorhanden
+- Gruppe 3: Zielvariable eingetragen, erklärende Variable fehlt
+- Gruppe 4: Ziel- und erklärende Variable eingetragen
 
 Für obiges Journal ergäbe sich dadurch folgende Klassifizierung der erklärenden
 Variablen _Büroarbeit_ (EV) und Zielvariablen _Rückenschmerzen_ (ZV):
@@ -111,12 +111,12 @@ Rückenschmerzen; dazu müssten wohl weitere Daten erfasst werden.
 - Die erstellte Applikation ist für die lokale Anwendung durchaus praktisch
   einsetzbar. Ich werde sie versuchshalber einsetzen, um möglichen Ursachen für
   meine Kopfschmerzen auf die Spur zu kommen.
-- Ob die Applikation auch für mehrere Benutzer auf einem Server praktikabel
-  verwendbar ist (Lasttest), konnte nicht getestet werden. Im Frontend wird es
+- Ob die Applikation auch für mehrere Benutzer auf einem Server praktisch
+  einsetzbar ist (Lasttest), konnte nicht getestet werden. Im Frontend wird es
   sich zeigen, ob das komplette Neuladen des Journals beim Erfassen eines Tags
   auch bei grösseren Journalen genug performant ist.
 - Das User-Interface wurde bewusst minimalistisch gehalten. Auf Fragestellungen
-  wie Accessibility und Responsiveness konnte aus zeitlichen gründen nicht
+  wie Accessibility und Responsiveness konnte aus zeitlichen Gründen nicht
   eingegangen werden.
 - Die ursprünglich geplante Umsetzung mit der redundanten Datenspeicherung
   konnte umgangen werden. Dafür müssen mehr Abfragen gegen den Key-Value-Store
@@ -173,11 +173,11 @@ Rückenschmerzen; dazu müssten wohl weitere Daten erfasst werden.
 | 05.09.2019 |      1.0 | BE        | Backend mit Node.js, Express, Redis-Client und Docker aufgesetzt |
 | 05.09.2019 |      0.5 | Dok       | Dokument für Zusammenfassung aufgesetzt (Makefile für Pandoc)    |
 | 12.09.2019 |      0.5 | BE        | API-Design erarbeitet                                            |
-| 13.09.2019 |      1.0 | BE        | Durchstich imt Express.js und Redis: Log-Eintrag erfassen        |
+| 13.09.2019 |      1.0 | BE        | Durchstich mit Express.js und Redis: Log-Eintrag erfassen        |
 | 13.09.2019 |      1.0 | BE        | Validierungsfunktionen mit Testfällen entwickelt                 |
 | 15.09.2019 |      0.5 | BE        | Löschfunktion für Log-Einträge umgesetzt                         |
 | 15.09.2019 |      1.0 | BE        | Tags aller Log-Einträge eines Benutzers und pro Datum ermitteln  |
-| 15.09.2019 |      1.5 | BE        | Map von Datum auf Tagliste erstellen                             |
+| 15.09.2019 |      1.5 | BE        | Map von Datum auf Tagliste erstellt                              |
 | 15.09.2019 |      0.5 | BE        | Testfall für Kategorisierung der Tag-Korrelation schrieben       |
 | 17.09.2019 |      1.0 | BE        | Kategorisierung und Phi-Funktion für Tag-Korrelation umgesetzt   |
 | 18.09.2019 |      0.5 | BE        | Korrekturen an Kategorisierung und Tag-Korrelation vorgenommen   |
@@ -194,7 +194,7 @@ Rückenschmerzen; dazu müssten wohl weitere Daten erfasst werden.
 | 26.09.2019 |      0.5 | FE        | Navigation und Session-Handling verbessert                       |
 | 26.09.2019 |      0.5 | FE        | Generische Funktion für Backend-Requests erstellt                |
 | 26.09.2019 |      0.5 | FE        | Formular zum Erfassen von Journaleinträgen erstellt              |
-| 26.09.2019 |      0.5 | FE        | Journaleinträge aufgrund neuer und bestehender Tags erstellen    |
+| 26.09.2019 |      0.5 | FE        | Journaleinträge aufgrund neuer und bestehender Tags erstellt     |
 | 26.09.2019 |      0.5 | BE        | Endpoint und Testskript für Journaleinträge-Tagesdaten erstellt  |
 | 27.09.2019 |      1.0 | FE        | Journal laden und darstellen                                     |
 | 27.09.2019 |      0.5 | FE        | Lösch-Funktion für bestehende Einträge implementiert             |
@@ -208,5 +208,5 @@ Rückenschmerzen; dazu müssten wohl weitere Daten erfasst werden.
 (Legende: BE=Backend, FE=Frontend, Dok=Dokumentation, Dep=Deployment)
 
 Total wurden 32 Stunden Arbeitsaufwand geleistet, verteilt auf Backend (14.5
-Stunden), Frontend (7 Stunden), Dokumentation (7.5 Stunden) und Deployment
-(3.0).
+Stunden), Frontend (7 Stunden), Dokumentation (7.5 Stunden) und Deployment (3
+Stunden).
