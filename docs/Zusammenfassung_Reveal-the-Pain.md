@@ -27,6 +27,40 @@ Lycanothrope's Log_).
 
 # Technische Dokumentation
 
+Die Applikation besteht aus drei Teilen: Ein Frontend, das als Single Page
+Application umgesetzt ist; ein Backend, das eine RESTful API anbietet; und den 
+Key-Value-Store [Redis](https://redis.io/) für die Datenhaltung.
+
+Das Frontend wurde mit reinem JavaScript (_«Vanilla JS»_) entwickelt. Es wurden
+keine externen Dependencies verwendet, noch gibt es einen Build-Prozess. Die
+ursprüngliche Idee, Web Components zu verwenden, wurde aus zeilichen Gründen
+aufgegeben. Das Design-Ziel im Frontend war Einfachheit.
+
+Im Backend hingegen sind verschiedene Libraries verwendet worden: `express` und
+`cors` für die RESTful API, `jsonwebtoken` für das Ausstellen und Validieren
+der Tokens ‒ d.h. zum Schützen der API, `bcryptjs` zum Verschlüsseln von
+Passwörtern, `redis` zum Ansprechen des Key-Value-Stores, und `jest` für Unit
+Tests.
+
+Im Key-Value-Store (Redis) werden die Daten als
+[Sets](https://redis.io/commands/set) abgelegt. Der Key hat die Form
+`username:date`, und der Wert ist ein Set von Tags, also z.B.
+`johndoe:2019-09-28 = [Beer, Walk, Coffee, Work, Stress, Insomnia]`.
+
+Das Backend wurde einerseits mit Unit Tests (Berechnung der Korrelation,
+Validierungen), andererseits mit einem Python-Skript (End-to-End-Tests der API)
+getestet. Das Frontend wurde ausschliesslich manuell getestet.
+
+Um die Applikation produktiv betreiben zu können, müsste die statische Datei
+mit Klartext-Credentials durch ein Registrierungssystem ersetzt werden.
+(Innerhalb des Backends werden bereits die verschlüsselten `bcrypt`-Tokens
+geprüft.)
+
+Die Applikation kann mittels `docker-compose` gestartet werden. Die Applikation
+ist unter der URL [http://localhost:8080/](http://localhost:8080/) verfügbar,
+und greift auf das Backend (Port `8000`) zu, welches wiederum auf Redis zugreift
+(Port `6379`).
+
 ## Berechnung der Korrelation
 
 Der Benutzer hat während einer Woche seine Verhaltensweisen getrackt, um auf
@@ -60,13 +94,9 @@ Variablen _Büroarbeit_ (EV) und Zielvariablen _Rückenschmerzen_ (ZV):
 | ZV vorhanden | 2 (Do, Sa) | 3 (Mo, Di, Mi) |
 
 Die Gruppen können nun folgendermassen bezeichnet und mit Werten belegt werden:
-
-- EV und ZV fehlt: $n_{00}=1$
-- EV vorhanden/ZV fehlt: $n_{01}=1$
-- EV fehlt/ZV vorhanden: $n_{10}=2$
-- EV und ZV vorhanden: $n_{11}=3$
-
-Der Phi-Koeffizient kann nun folgendermassen berechnet werden:
+EV und ZV fehlt: $n_{00}=1$, EV vorhanden/ZV fehlt: $n_{01}=1$, EV fehlt/ZV
+vorhanden: $n_{10}=2$, EV und ZV vorhanden: $n_{11}=3$. Der Phi-Koeffizient
+kann nun folgendermassen berechnet werden:
 
 $$ \phi = \frac{n_{11}n_{00} - n_{10}n_{01}}{\sqrt{(n_{10}+n_{11})(n_{00}+n_{01})(n_{01}+n_{11})(n_{00}+n_{10})}} $$
 
@@ -82,18 +112,29 @@ Rückenleiden auf die Spur zu kommen.
 
 # Fazit
 
-- Die Blockwoche und v.a. die Projektarbeit haben nicht nur mein Interesse an
-  der Web-Entwicklung wieder geweckt, sondern auch an der funktionalen und
-  asynchronen Programmierung.
-- Zur praktischen Anwendung müsste die Möglichkeit einer Registrierung
-  eingebaut werden.
-
-# Reflexion
-
+- Die erstellte Applikation ist für die lokale Anwendung durchaus praktisch
+  einsetzbar.
+- Ob die Applikation auch für mehrere Benutzer 
+- Das User-Interface wurde bewusst minimalistisch gehalten. Auf Fragestellungen
+  wie Accessibility und Responsiveness konnte aus zeitlichen gründen nicht
+  eingegangen werden.
 - Die ursprünglich geplante Umsetzung mit der redundanten Datenspeicherung
   konnte umgangen werden. Dafür müssen mehr Abfragen gegen den Key-Value-Store
   getätigt und ausgewertet werden. Mit kleineren Datenmengen hat sich das nicht
   als problematisch ausgestellt.
+- Zur praktischen Anwendung auf einem Server müsste die Möglichkeit einer
+  Registrierung eingebaut werden. Die Credentials könnten in Redis gespeichert
+  werden.
+- Die Blockwoche und v.a. die Projektarbeit haben nicht nur mein Interesse an
+  der Web-Entwicklung wieder geweckt, sondern auch an der funktionalen und
+  asynchronen Programmierung.
+- Ein Studienkollege merkte an, dass sich der Report auch gut mit einem
+  Diagramm visualisieren liesse. Da dies den Projektumfang sprengen würde,
+  möchte ich diese Erweiterung im Rahmen des Moduls _Datenvisualisierung_, das
+  ich dieses Semester besuche, mit [D3.js](https://d3js.org/) umsetzen.
+
+# Reflexion
+
 - Ursprünglich wollte ich das Backend mit der Programmiersprache Go umsetzen,
   weil ich damit schon verschiedene kleine HTTP-Server-Anwendungen entwickelt
   habe. Nach der Einführung in Node.js und Express.js habe ich mich aber dazu
@@ -105,10 +146,63 @@ Rückenleiden auf die Spur zu kommen.
   Event-Loop von Node.js nicht mit unnötig grossen Aufgaben zu blockieren. Hat
   man sich aber erst einmal an den Promise-Mechanismus gewöhnt, kann man damit
   schnell übersichtlichen und hochwertigen Code schreiben.
+- Beim Frontend musste ich aus zeitlichen Gründen von der Idee, Web Components
+  zu verwenden, abrücken. Ich habe mich dazu entschieden, das Frontend mit
+  HTML, CSS und Vanilla JS zu entwickeln, d.h. ohne externe
+  Dependencies und ohne Build-Prozess.
+- Beim Backend habe ich andere Design-Ziele verfolgt: Ich habe Libraries
+  verwendet, um mir die Entwicklung möglichst zu erleichtern.
+- Für den Umfang der Applikation ist ein Frontend mit Vanilla JS praktikabel.
+  Bei grösseren Frontends gibt es mehr Statusübergänge, was ohne
+  MVC-Architektur schnell unübersichtlich werden könnte.
 
 # Arbeitsjournal
 
+| Datum      | Stunden | Bereich | Tätigkeit                                                        |
+|------------|--------:|---------|------------------------------------------------------------------|
+| 01.09.2019 |     1.0 | Dok     | Projektidee ausgearbeitet                                        |
+| 01.09.2019 |     1.0 | BE      | Einarbeiten in Redis Sets                                        |
+| 01.09.2019 |     1.0 | Dep     | initiale Konfiguration für Docker Compose erstellt               |
+| 04.09.2019 |     1.0 | Dok     | Projektbeschreibung erstellt                                     |
+| 05.09.2019 |     1.0 | BE      | Backend mit Node.js, Express, Redis-Client und Docker aufgesetzt |
+| 05.09.2019 |     0.5 | Dok     | Dokument für Zusammenfassung aufgesetzt (Makefile für Pandoc)    |
+| 12.09.2019 |     0.5 | BE      | API-Design erarbeitet                                            |
+| 13.09.2019 |     1.0 | BE      | Durchstich imt Express.js und Redis: Log-Eintrag erfassen        |
+| 13.09.2019 |     1.0 | BE      | Validierungsfunktionen mit Testfällen entwickelt                 |
+| 15.09.2019 |     0.5 | BE      | Löschfunktion für Log-Einträge umgesetzt                         |
+| 15.09.2019 |     1.0 | BE      | Tags aller Log-Einträge eines Benutzers und pro Datum ermitteln  |
+| 15.09.2019 |     1.5 | BE      | Map von Datum auf Tagliste erstellen                             |
+| 15.09.2019 |     0.5 | BE      | Testfall für Kategorisierung der Tag-Korrelation schrieben       |
+| 17.09.2019 |     1.0 | BE      | Kategorisierung und Phi-Funktion für Tag-Korrelation umgesetzt   |
+| 18.09.2019 |     0.5 | BE      | Korrekturen an Kategorisierung und Tag-Korrelation vorgenommen   |
+| 19.09.2019 |     1.0 | BE      | Tag-Korrelation und dazugehörigen Endpoint umgesetzt             |
+| 19.09.2019 |     0.5 | BE      | Python-Skript zur Erstellung von Testdaten über HTTP erstellt    |
+| 20.09.2019 |     1.0 | BE      | Authentifizierung/Autorisierung mit bcrypt und JWT implementiert |
+| 20.09.2019 |     0.5 | BE      | Testdaten-Skripts um AuthN/AuthZ erweitert                       |
+| 22.09.2019 |     1.0 | Dok     | Berechnung des Phi-Koeffizienten dokumentiert                    |
+| 23.09.2019 |     1.0 | Dep     | FE-Deployment erstellt; Abhängigkeiten definiert                 |
+| 23.09.2019 |     1.0 | Dep     | BE erst nach Redis aufstarten; Verbindung umkonfiguriert         |
+| 24.09.2019 |     1.0 | FE      | User-Interface aufgebaut; Login-Formular erstellt; Login-Request |
+| 24.09.2019 |     0.5 | BE      | CORS konfiguriert für lokales Dep                                |
+| 25.09.2019 |     1.0 | FE      | Login/Logout und Navigation (Single Pager) umgesetzt             |
+| 26.09.2019 |     0.5 | FE      | Navigation und Session-Handling verbessert                       |
+| 26.09.2019 |     0.5 | FE      | Generische Funktion für BE-Requests erstellt                     |
+| 26.09.2019 |     0.5 | FE      | Formular zum Erfassen von Journaleinträgen erstellt              |
+| 26.09.2019 |     0.5 | FE      | Journaleinträge aufgrund neuer und bestehender Tags erstellen    |
+| 26.09.2019 |     0.5 | BE      | Endpoint und Testskript für Journaleinträge-Tagesdaten erstellt  |
+| 27.09.2019 |     1.0 | FE      | Journal laden und darstellen                                     |
+| 27.09.2019 |     0.5 | FE      | Lösch-Funktion für bestehende Einträge implementiert             |
+| 27.09.2019 |     1.0 | FE      | Report-Seite erstellt; Laden und Darstellen der Korrelationen    |
+| 28.09.2019 |     0.5 | FE      | Korrelationen absteigend sortieren und bei jedem Aufruf leeren   |
+| 28.09.2019 |     4.0 | Dok     | Techische Dokumentation (Architektur, Libraries, Dep)            |
+|            |    31.0 | Total   |                                                                  |
+
+(Legende: BE=Backend, FE=Frontend, Dok=Dokumentation, Dep=Deployment)
+
+Total wurden 31 Stunden Arbeitsaufwand geleistet, verteilt auf Backend (13.5
+Stunden), Frontend (7 Stunden), Dokumentation (7.5 Stunden) und Deployment
+(3.0).
+
 # Quellen
 
-Marjin Haverbeke: _Eloquent JavaScript. A Modern Introduction to Programming.
-Third Edition._ 
+Marjin Haverbeke: _Eloquent JavaScript. A Modern Introduction to Programming. (Third Edition)_
