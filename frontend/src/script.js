@@ -1,3 +1,5 @@
+'use strict';
+
 (function() {
     const baseUrl = 'http://localhost:8000';
 
