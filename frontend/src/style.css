@@ -54,6 +54,9 @@ ul#journalList ul {
 	margin: 5px;
 	display: inline-block;
 	font-weight: normal;
+}
+
+#secJournal .tag {
     cursor: crosshair;
 }
 
