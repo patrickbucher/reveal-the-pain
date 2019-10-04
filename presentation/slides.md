@@ -2,6 +2,7 @@
 title: 'Reveal the Pain'
 subtitle: Web Programming Lab
 author: Patrick Bucher
+date: 05.10.2019
 ---
 
 # Projektidee
@@ -60,3 +61,9 @@ $$ -1 \leq \phi \leq 1 $$
 Beispiel:
 
 - `toni:2019-10-04 = [Work, Walk, TV, Insomnia]`
+
+# Ende
+
+Danke für die Aufmerksamkeit!
+
+Fragen?
